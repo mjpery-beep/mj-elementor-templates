@@ -1,0 +1,271 @@
+/**
+ * Styles pour le widget Menu Navigation MJET.
+ */
+
+/* Container */
+.mjet-nav-menu-wrapper {
+	position: relative;
+}
+
+/* Menu principal */
+.mjet-nav-menu {
+	display: flex;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mjet-nav-menu--horizontal {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.mjet-nav-menu--vertical {
+	flex-direction: column;
+}
+
+/* Items */
+.mjet-nav-menu .menu-item {
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+
+.mjet-nav-menu .menu-item a {
+	display: block;
+	text-decoration: none;
+	transition: color 0.3s ease, background-color 0.3s ease;
+	position: relative;
+	white-space: nowrap;
+}
+
+/* Indicateur underline */
+.mjet-nav-menu--pointer-underline .menu-item > a::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 0;
+	height: 2px;
+	background-color: currentColor;
+	transition: width 0.3s ease;
+}
+
+.mjet-nav-menu--pointer-underline .menu-item > a:hover::after,
+.mjet-nav-menu--pointer-underline .menu-item > a:focus::after,
+.mjet-nav-menu--pointer-underline .current-menu-item > a::after,
+.mjet-nav-menu--pointer-underline .current-menu-ancestor > a::after {
+	width: 100%;
+}
+
+/* Sous-menus */
+.mjet-nav-menu .sub-menu {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	min-width: 200px;
+	padding: 10px 0;
+	margin: 0;
+	list-style: none;
+	z-index: 1000;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(10px);
+	transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.mjet-nav-menu--vertical .sub-menu {
+	position: static;
+	transform: none;
+	padding-left: 15px;
+}
+
+.mjet-nav-menu .menu-item:hover > .sub-menu,
+.mjet-nav-menu .menu-item:focus-within > .sub-menu {
+	display: block;
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.mjet-nav-menu .sub-menu .sub-menu {
+	top: 0;
+	left: 100%;
+}
+
+.mjet-nav-menu .sub-menu .menu-item a {
+	padding: 8px 20px;
+	white-space: normal;
+}
+
+/* Toggle mobile */
+.mjet-nav-toggle-wrap {
+	display: none;
+}
+
+.mjet-nav-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 8px;
+	line-height: 1;
+}
+
+.mjet-nav-toggle:focus {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.mjet-nav-toggle-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.mjet-nav-toggle-close {
+	display: none;
+}
+
+.mjet-nav-menu-wrapper.mjet-nav-open .mjet-nav-toggle-open {
+	display: none;
+}
+
+.mjet-nav-menu-wrapper.mjet-nav-open .mjet-nav-toggle-close {
+	display: flex;
+}
+
+/* Menu mobile ouvert */
+.mjet-nav-menu-wrapper.mjet-nav-open .mjet-nav-menu-container {
+	display: block;
+}
+
+.mjet-nav-menu-wrapper.mjet-nav-open .mjet-nav-menu {
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.mjet-nav-menu-wrapper.mjet-nav-open .mjet-nav-menu .sub-menu {
+	position: static;
+	display: block;
+	opacity: 1;
+	visibility: visible;
+	transform: none;
+	padding-left: 20px;
+	box-shadow: none;
+	background: transparent;
+}
+
+/* Breakpoint Tablet (< 1025px) */
+@media (max-width: 1024px) {
+	.mjet-nav-menu--breakpoint-tablet .mjet-nav-toggle-wrap {
+		display: flex;
+	}
+
+	.mjet-nav-menu--breakpoint-tablet .mjet-nav-menu-container {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: #fff;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		padding: 15px;
+		z-index: 1000;
+	}
+
+	.mjet-nav-menu--breakpoint-tablet.mjet-nav-open .mjet-nav-menu-container {
+		display: block;
+	}
+
+	.mjet-nav-menu--breakpoint-tablet .mjet-nav-menu {
+		flex-direction: column;
+	}
+
+	.mjet-nav-menu--breakpoint-tablet .mjet-nav-menu .sub-menu {
+		position: static;
+		display: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		padding-left: 20px;
+		box-shadow: none;
+		background: transparent;
+	}
+
+	.mjet-nav-menu--breakpoint-tablet .mjet-nav-menu .menu-item-has-children.mjet-submenu-open > .sub-menu {
+		display: block;
+	}
+}
+
+/* Breakpoint Mobile (< 768px) */
+@media (max-width: 767px) {
+	.mjet-nav-menu--breakpoint-mobile .mjet-nav-toggle-wrap {
+		display: flex;
+	}
+
+	.mjet-nav-menu--breakpoint-mobile .mjet-nav-menu-container {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		background: #fff;
+		box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+		padding: 15px;
+		z-index: 1000;
+	}
+
+	.mjet-nav-menu--breakpoint-mobile.mjet-nav-open .mjet-nav-menu-container {
+		display: block;
+	}
+
+	.mjet-nav-menu--breakpoint-mobile .mjet-nav-menu {
+		flex-direction: column;
+	}
+
+	.mjet-nav-menu--breakpoint-mobile .mjet-nav-menu .sub-menu {
+		position: static;
+		display: none;
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		padding-left: 20px;
+		box-shadow: none;
+		background: transparent;
+	}
+
+	.mjet-nav-menu--breakpoint-mobile .mjet-nav-menu .menu-item-has-children.mjet-submenu-open > .sub-menu {
+		display: block;
+	}
+}
+
+/* Accessibilité */
+.mjet-nav-menu .menu-item a:focus {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+/* Flèche sous-menu */
+.mjet-nav-menu .menu-item-has-children > a::before {
+	content: '';
+	display: inline-block;
+	width: 0;
+	height: 0;
+	margin-left: 6px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 4px solid currentColor;
+	vertical-align: middle;
+	float: right;
+	margin-top: 8px;
+}
+
+.mjet-nav-menu--horizontal > .menu-item-has-children > a::before {
+	float: none;
+	margin-top: 0;
+}

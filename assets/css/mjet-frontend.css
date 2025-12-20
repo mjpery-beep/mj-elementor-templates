@@ -1,0 +1,93 @@
+/**
+ * Styles frontend pour MJ Elementor Templates.
+ *
+ * @package mj-elementor-templates
+ */
+
+/* Hidden elements */
+.mjet-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Header */
+.mjet-header {
+	position: relative;
+	z-index: 100;
+}
+
+/* Footer */
+.mjet-footer {
+	position: relative;
+}
+
+.footer-width-fixer {
+	width: 100%;
+}
+
+/* Before footer */
+.mjet-before-footer {
+	position: relative;
+}
+
+/* Site wrapper */
+.mjet-site {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.mjet-site .site-content {
+	flex: 1;
+}
+
+/* Body classes when templates are active */
+body.mjet-header {
+	/* Styles when custom header is active */
+}
+
+body.mjet-footer {
+	/* Styles when custom footer is active */
+}
+
+/* Elementor editor compatibility */
+.elementor-editor-active .mjet-header,
+.elementor-editor-active .mjet-footer,
+.elementor-editor-active .mjet-before-footer {
+	pointer-events: none;
+}
+
+/* Sticky header support */
+.mjet-header.mjet-sticky {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 999;
+}
+
+body.admin-bar .mjet-header.mjet-sticky {
+	top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+	body.admin-bar .mjet-header.mjet-sticky {
+		top: 46px;
+	}
+}
+
+/* Print styles */
+@media print {
+	.mjet-header,
+	.mjet-footer,
+	.mjet-before-footer {
+		display: none;
+	}
+}

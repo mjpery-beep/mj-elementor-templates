@@ -1,0 +1,98 @@
+/**
+ * Styles admin pour MJ Elementor Templates.
+ *
+ * @package mj-elementor-templates
+ */
+
+/* Options table dans la métabox */
+.mjet-options-table {
+	width: 100%;
+}
+
+.mjet-options-table th {
+	width: 200px;
+	vertical-align: top;
+	padding-top: 15px;
+}
+
+.mjet-options-table td {
+	padding: 10px 0;
+}
+
+.mjet-options-table select.regular-text {
+	min-width: 300px;
+}
+
+/* Location select */
+.mjet-location-select {
+	max-width: 500px;
+}
+
+.mjet-location-select select {
+	width: 100%;
+}
+
+/* Shortcode row */
+.mjet-shortcode-row input {
+	font-family: Consolas, Monaco, monospace;
+	background-color: #f0f0f1;
+}
+
+/* Display rules */
+.mjet-display-rules select {
+	min-height: 100px;
+}
+
+/* Liste des templates - colonnes */
+.column-mjet_type {
+	width: 120px;
+}
+
+.column-mjet_display_rules {
+	width: 200px;
+}
+
+.column-mjet_shortcode {
+	width: 220px;
+}
+
+.column-mjet_shortcode input {
+	font-family: Consolas, Monaco, monospace;
+	font-size: 11px;
+	background-color: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	padding: 4px 8px;
+}
+
+/* Post type screen styles */
+.post-type-mjet-template .page-title-action {
+	background: #2271b1;
+	color: #fff;
+	border: none;
+}
+
+.post-type-mjet-template .page-title-action:hover {
+	background: #135e96;
+	color: #fff;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+	.mjet-options-table th {
+		width: 100%;
+		display: block;
+	}
+	
+	.mjet-options-table td {
+		display: block;
+		padding-left: 0;
+	}
+	
+	.mjet-options-table select.regular-text {
+		min-width: 100%;
+	}
+	
+	.mjet-location-select {
+		max-width: 100%;
+	}
+}
