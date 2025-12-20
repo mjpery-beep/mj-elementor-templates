@@ -15,6 +15,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 class MJET_Widgets_Loader {
 
 	/**
+	 * Definitions des widgets disponibles.
+	 *
+	 * @var array
+	 */
+	private static $widget_definitions = array(
+		array(
+			'file'  => 'includes/widgets/class-mjet-nav-menu.php',
+			'class' => '\\MJET\\Widgets\\MJET_Nav_Menu',
+		),
+		array(
+			'file'  => 'includes/widgets/class-mjet-youtube-channel.php',
+			'class' => '\\MJET\\Widgets\\MJET_Youtube_Channel',
+		),
+	);
+
+	/**
+	 * Widgets enregistres.
+	 *
+	 * @var array
+	 */
+	private static $registered_widgets = array();
+
+	/**
 	 * Instance unique.
 	 *
 	 * @var MJET_Widgets_Loader|null
@@ -64,12 +87,67 @@ class MJET_Widgets_Loader {
 	 * @param \Elementor\Widgets_Manager $widgets_manager Gestionnaire de widgets.
 	 */
 	public function register_widgets( $widgets_manager ) {
-		// Inclure et enregistrer les widgets.
-		require_once MJET_DIR . 'includes/widgets/class-mjet-nav-menu.php';
-		require_once MJET_DIR . 'includes/widgets/class-mjet-youtube-channel.php';
+		foreach ( self::$widget_definitions as $definition ) {
+			$this->maybe_include_widget_file( $definition['file'] );
 
-		$widgets_manager->register( new \MJET\Widgets\MJET_Nav_Menu() );
-		$widgets_manager->register( new \MJET\Widgets\MJET_Youtube_Channel() );
+			if ( ! class_exists( $definition['class'] ) ) {
+				continue;
+			}
+
+			$widget_instance = new $definition['class']();
+			$widgets_manager->register( $widget_instance );
+
+			self::$registered_widgets[ $widget_instance->get_name() ] = array(
+				'name'     => $widget_instance->get_name(),
+				'title'    => $widget_instance->get_title(),
+				'icon'     => $widget_instance->get_icon(),
+				'keywords' => method_exists( $widget_instance, 'get_keywords' ) ? (array) $widget_instance->get_keywords() : array(),
+			);
+		}
+	}
+
+	/**
+	 * Retourne le catalogue des widgets disponibles.
+	 *
+	 * @return array
+	 */
+	public static function get_widget_catalog() {
+		$catalog = array();
+
+		foreach ( self::$widget_definitions as $definition ) {
+			$file = trailingslashit( MJET_DIR ) . ltrim( $definition['file'], '/\\' );
+			if ( file_exists( $file ) ) {
+				require_once $file;
+			}
+
+			if ( ! class_exists( $definition['class'] ) ) {
+				continue;
+			}
+
+			$instance = new $definition['class']();
+
+			$catalog[] = array(
+				'name'     => $instance->get_name(),
+				'title'    => $instance->get_title(),
+				'icon'     => $instance->get_icon(),
+				'keywords' => method_exists( $instance, 'get_keywords' ) ? (array) $instance->get_keywords() : array(),
+			);
+		}
+
+		return $catalog;
+	}
+
+	/**
+	 * Inclut le fichier du widget si besoin.
+	 *
+	 * @param string $relative_path Chemin relatif.
+	 */
+	private function maybe_include_widget_file( $relative_path ) {
+		$file = trailingslashit( MJET_DIR ) . ltrim( $relative_path, '/\\' );
+
+		if ( file_exists( $file ) ) {
+			require_once $file;
+		}
 	}
 
 	/**

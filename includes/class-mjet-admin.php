@@ -318,6 +318,41 @@ class MJET_Admin {
 					</div>
 				</div>
 			</div>
+			<?php
+			$available_widgets = MJET_Widgets_Loader::get_widget_catalog();
+			?>
+			<div class="mjet-widgets-panel">
+				<h2><?php esc_html_e( 'Widgets MJ Templates', 'mj-elementor-templates' ); ?></h2>
+				<?php if ( ! empty( $available_widgets ) ) : ?>
+					<ul class="mjet-widgets-list">
+						<?php foreach ( $available_widgets as $widget ) :
+							$keywords = array();
+							if ( ! empty( $widget['keywords'] ) && is_array( $widget['keywords'] ) ) {
+								foreach ( $widget['keywords'] as $keyword ) {
+									$keywords[] = sanitize_text_field( $keyword );
+								}
+							}
+							?>
+							<li class="mjet-widgets-list-item">
+								<?php if ( ! empty( $widget['icon'] ) ) : ?>
+									<span class="mjet-widget-icon" aria-hidden="true">
+										<i class="<?php echo esc_attr( $widget['icon'] ); ?>"></i>
+									</span>
+								<?php endif; ?>
+								<div class="mjet-widget-meta">
+									<span class="mjet-widget-title"><?php echo esc_html( $widget['title'] ); ?></span>
+									<span class="mjet-widget-slug"><?php printf( esc_html__( 'Identifiant : %s', 'mj-elementor-templates' ), esc_html( $widget['name'] ) ); ?></span>
+									<?php if ( ! empty( $keywords ) ) : ?>
+										<span class="mjet-widget-keywords"><?php printf( esc_html__( 'Mots-clés : %s', 'mj-elementor-templates' ), esc_html( implode( ', ', $keywords ) ) ); ?></span>
+									<?php endif; ?>
+								</div>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				<?php else : ?>
+					<p class="description"><?php esc_html_e( 'Aucun widget disponible pour le moment.', 'mj-elementor-templates' ); ?></p>
+				<?php endif; ?>
+			</div>
 		</div>
 		<style>
 			.mjet-welcome-panel {
@@ -349,6 +384,59 @@ class MJET_Admin {
 				display: flex;
 				align-items: center;
 				gap: 5px;
+			}
+			.mjet-widgets-panel {
+				margin-top: 30px;
+				background: #fff;
+				border: 1px solid #c3c4c7;
+				padding: 20px;
+				border-radius: 4px;
+			}
+			.mjet-widgets-panel h2 {
+				margin-top: 0;
+				margin-bottom: 15px;
+			}
+			.mjet-widgets-list {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+				gap: 16px;
+			}
+			.mjet-widgets-list-item {
+				display: flex;
+				gap: 12px;
+				align-items: flex-start;
+				background: #f9f9f9;
+				border: 1px solid #e0e0e0;
+				border-radius: 6px;
+				padding: 12px;
+				min-height: 90px;
+			}
+			.mjet-widget-icon {
+				display: inline-flex;
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				background: #2271b1;
+				color: #fff;
+				align-items: center;
+				justify-content: center;
+				font-size: 16px;
+			}
+			.mjet-widget-meta {
+				display: flex;
+				flex-direction: column;
+				gap: 4px;
+			}
+			.mjet-widget-title {
+				font-weight: 600;
+			}
+			.mjet-widget-slug,
+			.mjet-widget-keywords {
+				font-size: 12px;
+				color: #555d66;
 			}
 		</style>
 		<?php
