@@ -28,6 +28,10 @@ class MJET_Widgets_Loader {
 			'file'  => 'includes/widgets/class-mjet-youtube-channel.php',
 			'class' => '\\MJET\\Widgets\\MJET_Youtube_Channel',
 		),
+		array(
+			'file'  => 'includes/widgets/class-mjet-template-block.php',
+			'class' => '\\MJET\\Widgets\\MJET_Template_Block',
+		),
 	);
 
 	/**

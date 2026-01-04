@@ -377,21 +377,31 @@ class MJET_Admin {
 
 		?>
 		<div class="wrap mjet-theme-manager">
-			<h1><?php esc_html_e( 'Gestionnaire de thème', 'mj-elementor-templates' ); ?></h1>
-			<p class="description">
-				<?php esc_html_e( 'Attribuez vos templates MJET aux différentes zones du site (header, archives, pages produits, etc.).', 'mj-elementor-templates' ); ?>
-			</p>
+			<header class="mjet-theme-manager__header">
+				<div>
+					<h1><?php esc_html_e( 'Gestionnaire de thème', 'mj-elementor-templates' ); ?></h1>
+					<p class="description">
+						<?php esc_html_e( 'Attribuez et surveillez les templates MJET utilisés pour les headers, pages singulières, archives ou pages WooCommerce.', 'mj-elementor-templates' ); ?>
+					</p>
+				</div>
+				<form class="mjet-theme-manager__actions-bar" method="get" action="<?php echo esc_url( admin_url( 'post-new.php' ) ); ?>">
+					<input type="hidden" name="post_type" value="mjet-template">
+					<label for="mjet_new_template_type" class="screen-reader-text"><?php esc_html_e( 'Ajouter un template pour', 'mj-elementor-templates' ); ?></label>
+					<select name="mjet_type" id="mjet_new_template_type" class="mjet-theme-manager__create-select">
+						<option value=""><?php esc_html_e( 'Créer pour…', 'mj-elementor-templates' ); ?></option>
+						<?php foreach ( $template_types as $create_key => $create_label ) : ?>
+							<option value="<?php echo esc_attr( $create_key ); ?>"><?php echo esc_html( $create_label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<button type="submit" class="button button-primary">
+						<span class="dashicons dashicons-plus"></span>
+						<?php esc_html_e( 'Ajouter', 'mj-elementor-templates' ); ?>
+					</button>
+				</form>
+			</header>
 
-			<table class="wp-list-table widefat striped">
-				<thead>
-					<tr>
-						<th scope="col"><?php esc_html_e( 'Type', 'mj-elementor-templates' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Templates assignés', 'mj-elementor-templates' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Actions rapides', 'mj-elementor-templates' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ( $template_types as $type_key => $type_label ) :
+			<div class="mjet-theme-manager__grid">
+				<?php foreach ( $template_types as $type_key => $type_label ) :
 						$templates = get_posts( array(
 							'post_type'      => 'mjet-template',
 							'posts_per_page' => -1,
@@ -422,11 +432,30 @@ class MJET_Admin {
 							admin_url( 'edit.php' )
 						);
 						?>
-						<tr>
-							<th scope="row" class="mjet-theme-manager__type">
-								<?php echo esc_html( $type_label ); ?>
-							</th>
-							<td class="mjet-theme-manager__templates">
+						<section class="mjet-theme-manager__card">
+							<header class="mjet-theme-manager__card-header">
+								<div class="mjet-theme-manager__card-heading">
+									<span class="mjet-theme-manager__card-title"><?php echo esc_html( $type_label ); ?></span>
+									<?php if ( in_array( $type_key, array( 'type_header', 'type_footer', 'type_before_footer' ), true ) ) : ?>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--primary"><?php esc_html_e( 'Structure', 'mj-elementor-templates' ); ?></span>
+									<?php elseif ( in_array( $type_key, array( 'type_single_page', 'type_single_post', 'type_single_product' ), true ) ) : ?>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--info"><?php esc_html_e( 'Singulier', 'mj-elementor-templates' ); ?></span>
+									<?php else : ?>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--muted"><?php esc_html_e( 'Archive', 'mj-elementor-templates' ); ?></span>
+									<?php endif; ?>
+								</div>
+								<div class="mjet-theme-manager__card-actions">
+									<a class="button button-small" href="<?php echo esc_url( $create_link ); ?>">
+										<span class="dashicons dashicons-plus"></span>
+										<?php esc_html_e( 'Nouveau', 'mj-elementor-templates' ); ?>
+									</a>
+									<a class="button button-link" href="<?php echo esc_url( $list_link ); ?>">
+										<span class="dashicons dashicons-filter"></span>
+										<?php esc_html_e( 'Filtrer la liste', 'mj-elementor-templates' ); ?>
+									</a>
+								</div>
+							</header>
+							<div class="mjet-theme-manager__card-body">
 								<?php if ( ! empty( $templates ) ) : ?>
 									<ul class="mjet-theme-manager__template-list">
 										<?php foreach ( $templates as $template ) :
@@ -516,23 +545,22 @@ class MJET_Admin {
 										<?php endforeach; ?>
 									</ul>
 								<?php else : ?>
-									<p class="description mjet-theme-manager__empty">
-										<?php esc_html_e( 'Aucun template assigné pour ce type.', 'mj-elementor-templates' ); ?>
-									</p>
+									<div class="mjet-theme-manager__empty">
+										<span class="dashicons dashicons-visibility"></span>
+										<p><?php esc_html_e( 'Aucun template assigné pour cet emplacement.', 'mj-elementor-templates' ); ?></p>
+									</div>
 								<?php endif; ?>
-							</td>
-							<td class="mjet-theme-manager__actions">
-								<a class="button button-primary" href="<?php echo esc_url( $create_link ); ?>">
-									<?php esc_html_e( 'Créer un template', 'mj-elementor-templates' ); ?>
-								</a>
-								<a class="button" href="<?php echo esc_url( $list_link ); ?>">
-									<?php esc_html_e( 'Voir la liste', 'mj-elementor-templates' ); ?>
-								</a>
-							</td>
-						</tr>
+							</div>
+						</section>
 					<?php endforeach; ?>
-				</tbody>
-			</table>
+			</div>
+
+			<footer class="mjet-theme-manager__legend">
+				<strong><?php esc_html_e( 'Légende', 'mj-elementor-templates' ); ?>:</strong>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--primary"></span><?php esc_html_e( 'Structure', 'mj-elementor-templates' ); ?></span>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--info"></span><?php esc_html_e( 'Singulier', 'mj-elementor-templates' ); ?></span>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--muted"></span><?php esc_html_e( 'Archive / Recherche', 'mj-elementor-templates' ); ?></span>
+			</footer>
 		</div>
 		<?php
 	}
@@ -1183,7 +1211,17 @@ class MJET_Admin {
 	public function enqueue_admin_scripts( $hook ) {
 		global $post_type;
 
+		$should_enqueue = false;
+
 		if ( 'mjet-template' === $post_type && in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php' ), true ) ) {
+			$should_enqueue = true;
+		}
+
+		if ( 'mj-templates_page_mjet-theme-manager' === $hook ) {
+			$should_enqueue = true;
+		}
+
+		if ( $should_enqueue ) {
 			wp_enqueue_style( 'mjet-admin', MJET_URL . 'assets/css/mjet-admin.css', array(), MJET_VERSION );
 			wp_enqueue_script( 'mjet-admin', MJET_URL . 'assets/js/mjet-admin.js', array( 'jquery' ), MJET_VERSION, true );
 		}
