@@ -1,0 +1,48 @@
+/* Styles pour le container Header MJET */
+.mjet-header {
+	position: sticky;
+	top: var(--mjet-header-top, 0px);
+	left: 0;
+	right: 0;
+	z-index: var(--mjet-header-z-index, 999);
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	transition: background-color var(--mjet-header-transition-duration, 350ms) var(--mjet-header-transition-easing, ease),
+		box-shadow var(--mjet-header-transition-duration, 350ms) var(--mjet-header-transition-easing, ease),
+		transform var(--mjet-header-transition-duration, 350ms) var(--mjet-header-transition-easing, ease),
+		opacity var(--mjet-header-transition-duration, 350ms) var(--mjet-header-transition-easing, ease);
+	will-change: transform, background-color, box-shadow, opacity;
+	backface-visibility: hidden;
+}
+
+.mjet-header--static {
+	position: relative;
+	top: auto;
+}
+
+.mjet-header--can-hide {
+	transition-property: transform, background-color, box-shadow, opacity;
+}
+
+.mjet-header.is-hidden {
+	transform: translateY(-100%);
+}
+
+.mjet-header.is-transparent {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+.mjet-header.is-shrunk {
+	min-height: var(--mjet-header-shrink-height, auto);
+}
+
+.mjet-header.is-shrunk .e-con-inner {
+	min-height: var(--mjet-header-shrink-height, auto);
+}
+
+body.elementor-editor-active .mjet-header {
+	position: relative !important;
+	top: auto !important;
+}

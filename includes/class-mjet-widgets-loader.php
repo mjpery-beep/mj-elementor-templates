@@ -62,8 +62,11 @@ class MJET_Widgets_Loader {
 	private function __construct() {
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
 		add_action( 'elementor/elements/categories_registered', array( $this, 'register_category' ) );
-		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_styles' ) );
 		add_action( 'elementor/frontend/after_register_scripts', array( $this, 'register_scripts' ) );
+		add_action( 'elementor/frontend/after_register_styles', array( $this, 'register_styles' ) );
+		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_styles' ) );
+
+		$this->bootstrap_extensions();
 	}
 
 	/**
@@ -151,15 +154,75 @@ class MJET_Widgets_Loader {
 	}
 
 	/**
+	 * Retourne une version basée sur le filemtime pour forcer l actualisation des assets.
+	 *
+	 * @param string $relative_path Chemin relatif depuis la racine du plugin.
+	 * @return string
+	 */
+	private function get_asset_version( $relative_path ) {
+		$path = trailingslashit( MJET_DIR ) . ltrim( $relative_path, '/\\' );
+
+		if ( file_exists( $path ) ) {
+			$modified = filemtime( $path );
+			if ( $modified ) {
+				return (string) $modified;
+			}
+		}
+
+		return defined( 'MJET_VERSION' ) ? MJET_VERSION : time();
+	}
+
+	/**
 	 * Enregistrer les scripts.
 	 */
 	public function register_scripts() {
+		$nav_menu_version      = $this->get_asset_version( 'assets/js/mjet-nav-menu.js' );
+		$container_sticky_version = $this->get_asset_version( 'assets/js/mjet-container-sticky.js' );
+
 		wp_register_script(
 			'mjet-nav-menu',
 			MJET_URL . 'assets/js/mjet-nav-menu.js',
 			array( 'jquery' ),
-			MJET_VERSION,
+			$nav_menu_version,
 			true
+		);
+
+		wp_register_script(
+			'mjet-container-sticky',
+			MJET_URL . 'assets/js/mjet-container-sticky.js',
+			array( 'elementor-frontend' ),
+			$container_sticky_version,
+			true
+		);
+	}
+
+	/**
+	 * Enregistrer les styles.
+	 */
+	public function register_styles() {
+		$nav_menu_version        = $this->get_asset_version( 'assets/css/mjet-nav-menu.css' );
+		$container_sticky_version = $this->get_asset_version( 'assets/css/mjet-container-sticky.css' );
+		$youtube_version          = $this->get_asset_version( 'assets/css/mjet-youtube-channel.css' );
+
+		wp_register_style(
+			'mjet-nav-menu',
+			MJET_URL . 'assets/css/mjet-nav-menu.css',
+			array(),
+			$nav_menu_version
+		);
+
+		wp_register_style(
+			'mjet-container-sticky',
+			MJET_URL . 'assets/css/mjet-container-sticky.css',
+			array(),
+			$container_sticky_version
+		);
+
+		wp_register_style(
+			'mjet-youtube-channel',
+			MJET_URL . 'assets/css/mjet-youtube-channel.css',
+			array(),
+			$youtube_version
 		);
 	}
 
@@ -168,18 +231,27 @@ class MJET_Widgets_Loader {
 	 */
 	public function enqueue_styles() {
 		wp_enqueue_style(
-			'mjet-nav-menu',
-			MJET_URL . 'assets/css/mjet-nav-menu.css',
-			array(),
-			MJET_VERSION
+			'mjet-nav-menu'
 		);
 
 		wp_enqueue_style(
-			'mjet-youtube-channel',
-			MJET_URL . 'assets/css/mjet-youtube-channel.css',
-			array(),
-			MJET_VERSION
+			'mjet-container-sticky'
 		);
+
+		wp_enqueue_style(
+			'mjet-youtube-channel'
+		);
+	}
+
+	/**
+	 * Charge les extensions front/back additionnelles.
+	 */
+	private function bootstrap_extensions() {
+		$this->maybe_include_widget_file( 'includes/modules/class-mjet-container-sticky.php' );
+
+		if ( class_exists( '\\MJET\\Modules\\Container_Sticky' ) ) {
+			\MJET\Modules\Container_Sticky::instance();
+		}
 	}
 }
 

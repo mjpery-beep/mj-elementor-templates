@@ -1,0 +1,54 @@
+/* Sticky containers for Elementor */
+.mjet-sticky-container[data-mjet-sticky="true"] {
+	position: sticky;
+	top: var(--mjet-sticky-offset, 0px);
+	transition: background-color var(--mjet-sticky-transition, 300ms) ease, transform var(--mjet-sticky-transition, 300ms) ease, opacity var(--mjet-sticky-transition, 300ms) ease;
+	z-index: var(--mjet-sticky-z-index, 999);
+}
+
+.mjet-sticky-container.mjet-sticky--fixed {
+	position: fixed;
+	top: var(--mjet-sticky-offset, 0px);
+	left: var(--mjet-sticky-left, 0px);
+	width: var(--mjet-sticky-width, auto);
+}
+
+.mjet-sticky-placeholder {
+	display: none;
+	width: 100%;
+	pointer-events: none;
+}
+
+.elementor-editor-active .mjet-sticky-container[data-mjet-sticky="true"] {
+	position: relative;
+	top: auto;
+	left: auto;
+	width: auto;
+}
+
+.mjet-sticky-container.mjet-sticky--scrolled {
+	background-color: var(--mjet-sticky-scroll-background, inherit);
+	background-image: var(--mjet-sticky-scroll-bg-image, none);
+	box-shadow: var(--mjet-sticky-shadow, none);
+}
+
+.mjet-sticky-container.mjet-sticky--scrolled.mjet-sticky--has-height {
+	height: var(--mjet-sticky-scroll-height);
+	min-height: var(--mjet-sticky-scroll-height);
+}
+
+.mjet-sticky-container.mjet-sticky-anim-fade {
+	opacity: 1;
+}
+
+.mjet-sticky-container.mjet-sticky-anim-fade.mjet-sticky--scrolled {
+	opacity: 0.92;
+}
+
+.mjet-sticky-container.mjet-sticky-anim-slide {
+	transform: translateY(0);
+}
+
+.mjet-sticky-container.mjet-sticky-anim-slide.mjet-sticky--scrolled {
+	transform: translateY(-6px);
+}

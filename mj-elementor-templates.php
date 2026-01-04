@@ -95,6 +95,7 @@ final class MJ_Elementor_Templates {
 		require_once MJET_DIR . 'includes/class-mjet-admin.php';
 		require_once MJET_DIR . 'includes/mjet-functions.php';
 		require_once MJET_DIR . 'includes/class-mjet-widgets-loader.php';
+		require_once MJET_DIR . 'includes/class-mjet-security-tweaks.php';
 
 		// Migration depuis UAE (si UAE est installé).
 		if ( is_admin() ) {
@@ -110,6 +111,7 @@ final class MJ_Elementor_Templates {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_shortcode( 'mjet_template', array( $this, 'render_template_shortcode' ) );
+		MJET_Security_Tweaks::init();
 
 		// Compatibilité thème.
 		$this->setup_theme_support();
