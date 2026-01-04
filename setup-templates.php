@@ -107,9 +107,17 @@ echo '<table>';
 echo '<tr><th>ID</th><th>Titre</th><th>Type</th><th>Statut</th><th>Conditions d\'affichage</th><th>Actions</th></tr>';
 
 $type_labels = array(
-	'type_header'        => 'Header',
-	'type_footer'        => 'Footer',
-	'type_before_footer' => 'Before Footer',
+	'type_header'           => 'Header',
+	'type_before_footer'    => 'Before Footer',
+	'type_footer'           => 'Footer',
+	'custom'                => 'Custom Block',
+	'type_single_page'      => 'Single Page',
+	'type_single_post'      => 'Single Post',
+	'type_single_product'   => 'Single Product',
+	'type_archive'          => 'Archive',
+	'type_products_archive' => 'Products Archive',
+	'type_search'           => 'Search Results',
+	'type_404'              => '404 Page',
 );
 
 foreach ( $mjet_templates as $template ) {

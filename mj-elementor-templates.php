@@ -96,6 +96,7 @@ final class MJ_Elementor_Templates {
 		require_once MJET_DIR . 'includes/mjet-functions.php';
 		require_once MJET_DIR . 'includes/class-mjet-widgets-loader.php';
 		require_once MJET_DIR . 'includes/class-mjet-security-tweaks.php';
+		require_once MJET_DIR . 'includes/class-mjet-theme-manager.php';
 
 		// Migration depuis UAE (si UAE est installé).
 		if ( is_admin() ) {
@@ -112,6 +113,7 @@ final class MJ_Elementor_Templates {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_shortcode( 'mjet_template', array( $this, 'render_template_shortcode' ) );
 		MJET_Security_Tweaks::init();
+		MJET_Theme_Manager::init();
 
 		// Compatibilité thème.
 		$this->setup_theme_support();
@@ -129,6 +131,12 @@ final class MJ_Elementor_Templates {
 			mjet_fix_existing_templates();
 			mjet_add_elementor_cpt_support();
 			update_option( 'mjet_template_fix_version', '1.0.1' );
+			$version = '1.0.1';
+		}
+
+		if ( version_compare( $version, '1.0.2', '<' ) ) {
+			mjet_apply_default_display_rules();
+			update_option( 'mjet_template_fix_version', '1.0.2' );
 		}
 	}
 
@@ -419,6 +427,45 @@ function mjet_fix_existing_templates() {
 		$data = get_post_meta( $template_id, '_elementor_data', true );
 		if ( empty( $data ) ) {
 			update_post_meta( $template_id, '_elementor_data', '[]' );
+		}
+	}
+}
+
+/**
+ * Appliquer les règles d'affichage par défaut pour les types spéciaux.
+ */
+function mjet_apply_default_display_rules() {
+	if ( ! class_exists( 'MJET_Admin' ) ) {
+		return;
+	}
+
+	$templates = get_posts( array(
+		'post_type'      => 'mjet-template',
+		'posts_per_page' => -1,
+		'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+		'fields'         => 'ids',
+	) );
+
+	if ( empty( $templates ) ) {
+		return;
+	}
+
+	foreach ( $templates as $template_id ) {
+		$type = get_post_meta( $template_id, 'mjet_template_type', true );
+		if ( empty( $type ) ) {
+			continue;
+		}
+
+		$default_rules = MJET_Admin::get_default_include_rules_for_type( $type );
+		if ( empty( $default_rules ) ) {
+			continue;
+		}
+
+		$current_rules = get_post_meta( $template_id, 'mjet_target_include_locations', true );
+		$needs_rules   = empty( $current_rules ) || empty( $current_rules['rule'] ) || ! is_array( $current_rules['rule'] );
+
+		if ( $needs_rules ) {
+			update_post_meta( $template_id, 'mjet_target_include_locations', $default_rules );
 		}
 	}
 }

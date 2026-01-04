@@ -34,6 +34,88 @@ class MJET_Admin {
 	}
 
 	/**
+	 * Retourne la liste des types de templates disponibles.
+	 *
+	 * @return array
+	 */
+	private function get_template_type_options() {
+		$types = array(
+			'type_header'           => __( 'Header', 'mj-elementor-templates' ),
+			'type_before_footer'    => __( 'Before Footer', 'mj-elementor-templates' ),
+			'type_footer'           => __( 'Footer', 'mj-elementor-templates' ),
+			'custom'                => __( 'Custom Block', 'mj-elementor-templates' ),
+			'type_single_page'      => __( 'Single Page', 'mj-elementor-templates' ),
+			'type_single_post'      => __( 'Single Post', 'mj-elementor-templates' ),
+			'type_archive'          => __( 'Archive', 'mj-elementor-templates' ),
+			'type_search'           => __( 'Search Results Page', 'mj-elementor-templates' ),
+			'type_single_product'   => __( 'Produit (WooCommerce)', 'mj-elementor-templates' ),
+			'type_products_archive' => __( 'Products Archive', 'mj-elementor-templates' ),
+			'type_404'              => __( '404 Page', 'mj-elementor-templates' ),
+		);
+
+		if ( ! post_type_exists( 'product' ) ) {
+			unset( $types['type_single_product'], $types['type_products_archive'] );
+		}
+
+		return apply_filters( 'mjet_template_type_options', $types );
+	}
+
+	/**
+	 * Retourne les règles d'inclusion par défaut selon le type.
+	 *
+	 * @param string $type Type de template.
+	 * @return array
+	 */
+	public static function get_default_include_rules_for_type( $type ) {
+		switch ( $type ) {
+			case 'type_404':
+				return array(
+					'rule'     => array( 'special-404' ),
+					'specific' => array(),
+				);
+
+			case 'type_search':
+				return array(
+					'rule'     => array( 'special-search' ),
+					'specific' => array(),
+				);
+
+			case 'type_archive':
+				return array(
+					'rule'     => array( 'basic-archives' ),
+					'specific' => array(),
+				);
+
+			case 'type_single_page':
+				return array(
+					'rule'     => array( 'page|all' ),
+					'specific' => array(),
+				);
+
+			case 'type_single_post':
+				return array(
+					'rule'     => array( 'post|all' ),
+					'specific' => array(),
+				);
+
+			case 'type_single_product':
+				return array(
+					'rule'     => array( 'product|all' ),
+					'specific' => array(),
+				);
+
+			case 'type_products_archive':
+				return array(
+					'rule'     => array( 'product|archive' ),
+					'specific' => array(),
+				);
+
+			default:
+				return array();
+		}
+	}
+
+	/**
 	 * Constructeur.
 	 */
 	private function __construct() {
@@ -44,6 +126,8 @@ class MJET_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 		add_filter( 'manage_mjet-template_posts_columns', array( $this, 'add_columns' ) );
 		add_action( 'manage_mjet-template_posts_custom_column', array( $this, 'render_columns' ), 10, 2 );
+		add_action( 'restrict_manage_posts', array( $this, 'render_type_filter_dropdown' ) );
+		add_action( 'pre_get_posts', array( $this, 'filter_admin_list_by_type' ) );
 		add_filter( 'single_template', array( $this, 'load_canvas_template' ) );
 		add_filter( 'template_include', array( $this, 'force_canvas_template' ), 99999 );
 		add_action( 'template_redirect', array( $this, 'block_template_frontend' ) );
@@ -260,6 +344,15 @@ class MJET_Admin {
 
 		add_submenu_page(
 			'mjet-templates',
+			__( 'Gestionnaire de thème', 'mj-elementor-templates' ),
+			__( 'Gestionnaire de thème', 'mj-elementor-templates' ),
+			'manage_options',
+			'mjet-theme-manager',
+			array( $this, 'render_theme_manager_page' )
+		);
+
+		add_submenu_page(
+			'mjet-templates',
 			__( 'Tous les templates', 'mj-elementor-templates' ),
 			__( 'Tous les templates', 'mj-elementor-templates' ),
 			'manage_options',
@@ -275,6 +368,237 @@ class MJET_Admin {
 		);
 	}
 
+	/**
+	 * Page Gestionnaire de thème.
+	 */
+	public function render_theme_manager_page() {
+		$template_types = $this->get_template_type_options();
+		unset( $template_types['custom'] );
+
+		?>
+		<div class="wrap mjet-theme-manager">
+			<h1><?php esc_html_e( 'Gestionnaire de thème', 'mj-elementor-templates' ); ?></h1>
+			<p class="description">
+				<?php esc_html_e( 'Attribuez vos templates MJET aux différentes zones du site (header, archives, pages produits, etc.).', 'mj-elementor-templates' ); ?>
+			</p>
+
+			<table class="wp-list-table widefat striped">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Type', 'mj-elementor-templates' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Templates assignés', 'mj-elementor-templates' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Actions rapides', 'mj-elementor-templates' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $template_types as $type_key => $type_label ) :
+						$templates = get_posts( array(
+							'post_type'      => 'mjet-template',
+							'posts_per_page' => -1,
+							'post_status'    => array( 'publish', 'draft', 'pending', 'private' ),
+							'orderby'        => 'date',
+							'order'          => 'DESC',
+							'meta_query'     => array(
+								array(
+									'key'   => 'mjet_template_type',
+									'value' => $type_key,
+								),
+							),
+						) );
+
+						$create_link = add_query_arg(
+							array(
+								'post_type' => 'mjet-template',
+								'mjet_type' => $type_key,
+							),
+							admin_url( 'post-new.php' )
+						);
+
+						$list_link = add_query_arg(
+							array(
+								'post_type'        => 'mjet-template',
+								'mjet_type_filter' => $type_key,
+							),
+							admin_url( 'edit.php' )
+						);
+						?>
+						<tr>
+							<th scope="row" class="mjet-theme-manager__type">
+								<?php echo esc_html( $type_label ); ?>
+							</th>
+							<td class="mjet-theme-manager__templates">
+								<?php if ( ! empty( $templates ) ) : ?>
+									<ul class="mjet-theme-manager__template-list">
+										<?php foreach ( $templates as $template ) :
+											$edit_link = get_edit_post_link( $template->ID );
+											$status_object = get_post_status_object( $template->post_status );
+											$status_label  = $status_object ? $status_object->label : $template->post_status;
+											$include       = get_post_meta( $template->ID, 'mjet_target_include_locations', true );
+											$exclude       = get_post_meta( $template->ID, 'mjet_target_exclude_locations', true );
+											$user_roles    = get_post_meta( $template->ID, 'mjet_target_user_roles', true );
+
+											$include_rules = array();
+											if ( ! empty( $include['rule'] ) && is_array( $include['rule'] ) ) {
+												foreach ( $include['rule'] as $rule_key ) {
+													$include_rules[] = MJET_Target_Rules::get_location_label( $rule_key );
+												}
+											}
+
+											if ( empty( $include_rules ) ) {
+												$include_rules[] = __( 'Aucune règle définie', 'mj-elementor-templates' );
+											}
+
+											if ( ! empty( $include['specific'] ) && is_array( $include['specific'] ) ) {
+												$include_rules[] = sprintf(
+													_n( '%d page spécifique', '%d pages spécifiques', count( $include['specific'] ), 'mj-elementor-templates' ),
+													count( $include['specific'] )
+												);
+											}
+
+											$exclude_rules = array();
+											if ( ! empty( $exclude['rule'] ) && is_array( $exclude['rule'] ) ) {
+												foreach ( $exclude['rule'] as $rule_key ) {
+													$exclude_rules[] = MJET_Target_Rules::get_location_label( $rule_key );
+												}
+											}
+
+											if ( ! empty( $exclude['specific'] ) && is_array( $exclude['specific'] ) ) {
+												$exclude_rules[] = sprintf(
+													_n( '%d page exclue', '%d pages exclues', count( $exclude['specific'] ), 'mj-elementor-templates' ),
+													count( $exclude['specific'] )
+												);
+											}
+
+											$roles_summary = __( 'Tous les utilisateurs', 'mj-elementor-templates' );
+											if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
+												$roles_labels = array();
+												foreach ( $user_roles as $role_key ) {
+													if ( 'all' === $role_key ) {
+														$roles_labels = array( __( 'Tous les utilisateurs', 'mj-elementor-templates' ) );
+														break;
+													}
+													$roles_labels[] = MJET_Target_Rules::get_user_role_label( $role_key );
+												}
+												if ( ! empty( $roles_labels ) ) {
+													$roles_summary = implode( ', ', array_unique( $roles_labels ) );
+												}
+											}
+
+											$is_global = ! empty( $include['rule'] ) && in_array( 'basic-global', (array) $include['rule'], true );
+											?>
+											<li>
+												<div class="mjet-theme-manager__template-header">
+													<a href="<?php echo esc_url( $edit_link ); ?>" class="mjet-theme-manager__template-title">
+														<?php echo esc_html( get_the_title( $template ) ); ?>
+													</a>
+													<?php if ( 'publish' !== $template->post_status ) : ?>
+														<span class="mjet-theme-manager__badge mjet-theme-manager__badge--muted"><?php echo esc_html( $status_label ); ?></span>
+													<?php endif; ?>
+													<?php if ( $is_global ) : ?>
+														<span class="mjet-theme-manager__badge mjet-theme-manager__badge--success"><?php esc_html_e( 'Site entier', 'mj-elementor-templates' ); ?></span>
+													<?php endif; ?>
+												</div>
+												<div class="mjet-theme-manager__meta">
+													<strong><?php esc_html_e( 'Règles', 'mj-elementor-templates' ); ?>:</strong>
+													<?php echo esc_html( implode( ' · ', array_unique( $include_rules ) ) ); ?>
+												</div>
+												<?php if ( ! empty( $exclude_rules ) ) : ?>
+													<div class="mjet-theme-manager__meta">
+														<strong><?php esc_html_e( 'Exclusions', 'mj-elementor-templates' ); ?>:</strong>
+														<?php echo esc_html( implode( ' · ', array_unique( $exclude_rules ) ) ); ?>
+													</div>
+												<?php endif; ?>
+												<div class="mjet-theme-manager__meta">
+													<strong><?php esc_html_e( 'Rôles', 'mj-elementor-templates' ); ?>:</strong>
+													<?php echo esc_html( $roles_summary ); ?>
+												</div>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								<?php else : ?>
+									<p class="description mjet-theme-manager__empty">
+										<?php esc_html_e( 'Aucun template assigné pour ce type.', 'mj-elementor-templates' ); ?>
+									</p>
+								<?php endif; ?>
+							</td>
+							<td class="mjet-theme-manager__actions">
+								<a class="button button-primary" href="<?php echo esc_url( $create_link ); ?>">
+									<?php esc_html_e( 'Créer un template', 'mj-elementor-templates' ); ?>
+								</a>
+								<a class="button" href="<?php echo esc_url( $list_link ); ?>">
+									<?php esc_html_e( 'Voir la liste', 'mj-elementor-templates' ); ?>
+								</a>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Affiche un filtre par type dans la liste des templates.
+	 */
+	public function render_type_filter_dropdown() {
+		global $typenow;
+
+		if ( 'mjet-template' !== $typenow ) {
+			return;
+		}
+
+		$template_types = $this->get_template_type_options();
+		$current_type  = isset( $_GET['mjet_type_filter'] ) ? sanitize_text_field( wp_unslash( $_GET['mjet_type_filter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		?>
+		<label class="screen-reader-text" for="mjet_type_filter">&nbsp;</label>
+		<select name="mjet_type_filter" id="mjet_type_filter" class="postform">
+			<option value=""><?php esc_html_e( 'Tous les types', 'mj-elementor-templates' ); ?></option>
+			<?php foreach ( $template_types as $type_key => $type_label ) : ?>
+				<option value="<?php echo esc_attr( $type_key ); ?>" <?php selected( $current_type, $type_key ); ?>><?php echo esc_html( $type_label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Filtre la liste admin selon le type sélectionné.
+	 *
+	 * @param WP_Query $query Requête courante.
+	 */
+	public function filter_admin_list_by_type( $query ) {
+		if ( ! is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+
+		global $pagenow;
+		if ( 'edit.php' !== $pagenow ) {
+			return;
+		}
+
+		$post_type = $query->get( 'post_type' );
+		if ( 'mjet-template' !== $post_type ) {
+			return;
+		}
+
+		if ( empty( $_GET['mjet_type_filter'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return;
+		}
+
+		$type           = sanitize_text_field( wp_unslash( $_GET['mjet_type_filter'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$template_types = $this->get_template_type_options();
+
+		if ( ! isset( $template_types[ $type ] ) ) {
+			return;
+		}
+
+		$meta_query   = (array) $query->get( 'meta_query' );
+		$meta_query[] = array(
+			'key'   => 'mjet_template_type',
+			'value' => $type,
+		);
+
+		$query->set( 'meta_query', $meta_query );
+	}
 	/**
 	 * Page des paramètres.
 	 */
@@ -465,6 +789,14 @@ class MJET_Admin {
 		$values            = get_post_custom( $post->ID );
 		$template_type     = isset( $values['mjet_template_type'] ) ? esc_attr( $values['mjet_template_type'][0] ) : '';
 		$display_on_canvas = isset( $values['mjet_display_on_canvas'] ) && '1' === $values['mjet_display_on_canvas'][0];
+		$template_types    = $this->get_template_type_options();
+
+		if ( empty( $template_type ) && isset( $_GET['mjet_type'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$requested_type = sanitize_text_field( wp_unslash( $_GET['mjet_type'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( isset( $template_types[ $requested_type ] ) ) {
+				$template_type = $requested_type;
+			}
+		}
 
 		wp_nonce_field( 'mjet_meta_nonce', 'mjet_meta_nonce' );
 
@@ -492,10 +824,9 @@ class MJET_Admin {
 					<td>
 						<select name="mjet_template_type" id="mjet_template_type" class="regular-text">
 							<option value=""><?php esc_html_e( '— Sélectionner —', 'mj-elementor-templates' ); ?></option>
-							<option value="type_header" <?php selected( $template_type, 'type_header' ); ?>><?php esc_html_e( 'Header', 'mj-elementor-templates' ); ?></option>
-							<option value="type_before_footer" <?php selected( $template_type, 'type_before_footer' ); ?>><?php esc_html_e( 'Before Footer', 'mj-elementor-templates' ); ?></option>
-							<option value="type_footer" <?php selected( $template_type, 'type_footer' ); ?>><?php esc_html_e( 'Footer', 'mj-elementor-templates' ); ?></option>
-							<option value="custom" <?php selected( $template_type, 'custom' ); ?>><?php esc_html_e( 'Custom Block', 'mj-elementor-templates' ); ?></option>
+							<?php foreach ( $template_types as $type_key => $type_label ) : ?>
+								<option value="<?php echo esc_attr( $type_key ); ?>" <?php selected( $template_type, $type_key ); ?>><?php echo esc_html( $type_label ); ?></option>
+							<?php endforeach; ?>
 						</select>
 					</td>
 				</tr>
@@ -644,13 +975,35 @@ class MJET_Admin {
 		}
 
 		// Sauvegarder le type de template.
+		$template_types = $this->get_template_type_options();
+
 		if ( isset( $_POST['mjet_template_type'] ) ) {
-			update_post_meta( $post_id, 'mjet_template_type', sanitize_text_field( wp_unslash( $_POST['mjet_template_type'] ) ) );
+			$type_value = sanitize_text_field( wp_unslash( $_POST['mjet_template_type'] ) );
+
+			if ( '' === $type_value ) {
+				delete_post_meta( $post_id, 'mjet_template_type' );
+			} elseif ( isset( $template_types[ $type_value ] ) ) {
+				update_post_meta( $post_id, 'mjet_template_type', $type_value );
+			} else {
+				$type_value = get_post_meta( $post_id, 'mjet_template_type', true );
+			}
 		}
+
+		$auto_include_rules = self::get_default_include_rules_for_type( $type_value );
 
 		// Sauvegarder les règles d'affichage.
 		if ( isset( $_POST['mjet_target_include_locations'] ) ) {
-			update_post_meta( $post_id, 'mjet_target_include_locations', $this->sanitize_location_rules( $_POST['mjet_target_include_locations'] ) );
+			$include_rules = $this->sanitize_location_rules( $_POST['mjet_target_include_locations'] );
+			if ( empty( $include_rules ) && ! empty( $auto_include_rules ) ) {
+				$include_rules = $auto_include_rules;
+			}
+			if ( empty( $include_rules ) ) {
+				delete_post_meta( $post_id, 'mjet_target_include_locations' );
+			} else {
+				update_post_meta( $post_id, 'mjet_target_include_locations', $include_rules );
+			}
+		} elseif ( ! empty( $auto_include_rules ) ) {
+			update_post_meta( $post_id, 'mjet_target_include_locations', $auto_include_rules );
 		} else {
 			delete_post_meta( $post_id, 'mjet_target_include_locations' );
 		}
@@ -720,17 +1073,12 @@ class MJET_Admin {
 	 * @param int    $post_id ID du post.
 	 */
 	public function render_columns( $column, $post_id ) {
-		switch ( $column ) {
-			case 'mjet_type':
-				$type   = get_post_meta( $post_id, 'mjet_template_type', true );
-				$labels = array(
-					'type_header'        => __( 'Header', 'mj-elementor-templates' ),
-					'type_footer'        => __( 'Footer', 'mj-elementor-templates' ),
-					'type_before_footer' => __( 'Before Footer', 'mj-elementor-templates' ),
-					'custom'             => __( 'Custom Block', 'mj-elementor-templates' ),
-				);
-				echo isset( $labels[ $type ] ) ? esc_html( $labels[ $type ] ) : '—';
-				break;
+			switch ( $column ) {
+				case 'mjet_type':
+					$type   = get_post_meta( $post_id, 'mjet_template_type', true );
+					$labels = $this->get_template_type_options();
+					echo isset( $labels[ $type ] ) ? esc_html( $labels[ $type ] ) : '—';
+					break;
 
 			case 'mjet_display_rules':
 				$locations = get_post_meta( $post_id, 'mjet_target_include_locations', true );

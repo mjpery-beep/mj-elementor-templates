@@ -20,9 +20,16 @@ Module de gestion des en-têtes (headers), pieds de page (footers) et blocs pers
 - **Création de templates** : Nouveau type de post `mjet-template`
 - **Types de templates** :
   - Header (en-tête)
-  - Footer (pied de page)
   - Before Footer (avant le pied de page)
+  - Footer (pied de page)
   - Custom Block (bloc personnalisé)
+  - Single Page (page individuelle)
+  - Single Post (article individuel)
+  - Single Product (produit WooCommerce)
+  - Archive (archives, blog, taxonomies)
+  - Products Archive (archives WooCommerce)
+  - Search Results Page (résultats de recherche)
+  - 404 Page
 
 - **Édition Elementor** : Édition visuelle complète avec Elementor Builder
 - **Conditions d'affichage** :
@@ -32,6 +39,7 @@ Module de gestion des en-têtes (headers), pieds de page (footers) et blocs pers
   - Pages spéciales (404, recherche, blog, accueil)
   - Types de posts spécifiques
   - Pages spécifiques
+  - Compatibilité WooCommerce (produits et archives)
 
 - **Rôles utilisateur** : Limitation par rôles WordPress
 
@@ -75,6 +83,7 @@ mj-elementor-templates/
 │   ├── class-mjet-target-rules.php  # Règles de ciblage
 │   ├── class-mjet-widgets-loader.php# Chargement des widgets
 │   ├── class-mjet-uae-migration.php # Migration UAE
+│   ├── class-mjet-theme-manager.php # Gestion des emplacements front
 │   ├── mjet-functions.php           # Fonctions utilitaires
 │   ├── themes/
 │   │   ├── class-mjet-theme-compat.php
@@ -84,7 +93,8 @@ mj-elementor-templates/
 │   └── widgets/
 │       └── class-mjet-nav-menu.php  # Widget Menu Navigation
 ├── templates/
-│   └── canvas.php                   # Template Elementor Canvas
+│   ├── canvas.php                   # Template Elementor Canvas
+│   └── theme-builder.php            # Template front pour archives/search/404
 ├── assets/
 │   ├── css/
 │   │   ├── mjet-frontend.css
@@ -121,6 +131,8 @@ mj-elementor-templates/
 - Métaboxes de configuration
 - Interface de gestion des templates
 - Règles d'affichage (conditions)
+- Page "Gestionnaire de thème" (vue tableau des emplacements)
+- Filtre admin par type (`mjet_type_filter`)
 
 **Post type arguments** :
 ```php
@@ -164,7 +176,22 @@ mj-elementor-templates/
 - Chargement des scripts/styles
 - Création de la catégorie "MJ Templates"
 
-### 3.6 Widget `MJET_Nav_Menu`
+### 3.6 Classe `MJET_Theme_Manager`
+**Fichier** : `includes/class-mjet-theme-manager.php`
+
+**Responsabilités** :
+- Résolution des templates par contexte (singles, archives, recherche, 404, WooCommerce)
+- Enqueue des CSS Elementor nécessaires via `Elementor\Core\Files\CSS\Post`
+- Substitution de `the_content` pour les singles et de `template_include` pour les archives
+- Exposition des hooks `mjet/theme_manager/before_content` et `mjet/theme_manager/after_content`
+
+**Flux principal** :
+1. `wp` détecte le contexte courant et calcule l'ID de template via `MJ_Elementor_Templates::get_template_id()`
+2. Enqueue des CSS immédiatement pour garantir le rendu dans `wp_head`
+3. `the_content` injecte le template pour Single Page/Post/Product
+4. `template_include` redirige vers `templates/theme-builder.php` pour archives/recherche/404
+
+### 3.7 Widget `MJET_Nav_Menu`
 **Fichier** : `includes/widgets/class-mjet-nav-menu.php`
 
 **Héritage** : `Elementor\Widget_Base`
