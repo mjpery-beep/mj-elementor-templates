@@ -180,8 +180,35 @@ final class MJ_Elementor_Templates {
 			$css_file = new \Elementor\Core\Files\CSS\Post( $template_id );
 			$css_file->enqueue();
 		}
+		$this->enable_template_assets( $template_id );
 	}
 
+	/**
+	 * Active les assets conditionnels Elementor associés au template.
+	 *
+	 * @param int $template_id ID du template.
+	 * @return void
+	 */
+	private function enable_template_assets( $template_id ) {
+		if ( ! class_exists( '\Elementor\Plugin' ) ) {
+			return;
+		}
+
+		$assets_meta_key = '_elementor_page_assets';
+		if ( class_exists( '\Elementor\Core\Base\Elements_Iteration_Actions\Assets' ) ) {
+			$assets_meta_key = \Elementor\Core\Base\Elements_Iteration_Actions\Assets::ASSETS_META_KEY;
+		}
+
+		$assets = get_post_meta( $template_id, $assets_meta_key, true );
+		if ( empty( $assets ) || ! is_array( $assets ) ) {
+			return;
+		}
+
+		$elementor = \Elementor\Plugin::instance();
+		if ( isset( $elementor->assets_loader ) && method_exists( $elementor->assets_loader, 'enable_assets' ) ) {
+			$elementor->assets_loader->enable_assets( $assets );
+		}
+	}
 	/**
 	 * Ajouter des classes au body.
 	 *
