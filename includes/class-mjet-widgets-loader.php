@@ -32,6 +32,10 @@ class MJET_Widgets_Loader {
 			'file'  => 'includes/widgets/class-mjet-template-block.php',
 			'class' => '\\MJET\\Widgets\\MJET_Template_Block',
 		),
+		array(
+			'file'  => 'includes/widgets/class-mjet-post-grid.php',
+			'class' => '\\MJET\\Widgets\\MJET_Post_Grid',
+		),
 	);
 
 	/**
@@ -207,6 +211,7 @@ class MJET_Widgets_Loader {
 		$nav_menu_version        = $this->get_asset_version( 'assets/css/mjet-nav-menu.css' );
 		$container_sticky_version = $this->get_asset_version( 'assets/css/mjet-container-sticky.css' );
 		$youtube_version          = $this->get_asset_version( 'assets/css/mjet-youtube-channel.css' );
+		$post_grid_version        = $this->get_asset_version( 'assets/css/mjet-post-grid.css' );
 
 		wp_register_style(
 			'mjet-nav-menu',
@@ -227,6 +232,13 @@ class MJET_Widgets_Loader {
 			MJET_URL . 'assets/css/mjet-youtube-channel.css',
 			array(),
 			$youtube_version
+		);
+
+		wp_register_style(
+			'mjet-post-grid',
+			MJET_URL . 'assets/css/mjet-post-grid.css',
+			array(),
+			$post_grid_version
 		);
 	}
 
@@ -255,6 +267,12 @@ class MJET_Widgets_Loader {
 
 		if ( class_exists( '\\MJET\\Modules\\Container_Sticky' ) ) {
 			\MJET\Modules\Container_Sticky::instance();
+		}
+
+		$this->maybe_include_widget_file( 'includes/modules/class-mjet-widget-conditions.php' );
+
+		if ( class_exists( '\\MJET\\Modules\\Widget_Conditions' ) ) {
+			\MJET\Modules\Widget_Conditions::instance();
 		}
 	}
 }
