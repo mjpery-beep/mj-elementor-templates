@@ -516,6 +516,57 @@ class MJET_Post_Grid extends Widget_Base {
 			)
 		);
 
+		$this->add_responsive_control(
+			'card_margin',
+			array(
+				'label' => __( 'Margin', 'mj-elementor-templates' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', 'em', '%' ),
+				'selectors' => array(
+					'{{WRAPPER}} .mjet-post-grid__card' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->end_controls_section();
+
+		$this->start_controls_section(
+			'mjet_post_grid_style_image',
+			array(
+				'label' => __( 'Image', 'mj-elementor-templates' ),
+				'tab' => Controls_Manager::TAB_STYLE,
+				'condition' => array( 'show_image' => 'yes' ),
+			)
+		);
+
+		$this->add_responsive_control(
+			'image_border_radius_style',
+			array(
+				'label' => __( 'Border Radius', 'mj-elementor-templates' ),
+				'type' => Controls_Manager::DIMENSIONS,
+				'size_units' => array( 'px', '%' ),
+				'selectors' => array(
+					'{{WRAPPER}} .mjet-post-grid__media' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .mjet-post-grid__media img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+				),
+			)
+		);
+
+		$this->add_control(
+			'image_hover_effect',
+			array(
+				'label' => __( 'Hover Effect', 'mj-elementor-templates' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => array(
+					'none' => __( 'None', 'mj-elementor-templates' ),
+					'zoom' => __( 'Zoom In', 'mj-elementor-templates' ),
+					'lift' => __( 'Lift', 'mj-elementor-templates' ),
+					'fade' => __( 'Fade', 'mj-elementor-templates' ),
+				),
+				'default' => 'none',
+			)
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -966,6 +1017,12 @@ class MJET_Post_Grid extends Widget_Base {
 		$classes[] = 'mjet-post-grid--columns-tablet-' . $tablet;
 		$classes[] = 'mjet-post-grid--columns-mobile-' . $mobile;
 
+		$effect = $this->sanitize_hover_effect( isset( $settings['image_hover_effect'] ) ? $settings['image_hover_effect'] : 'none' );
+
+		if ( 'none' !== $effect ) {
+			$classes[] = 'mjet-post-grid--hover-' . $effect;
+		}
+
 		return $classes;
 	}
 
@@ -981,6 +1038,20 @@ class MJET_Post_Grid extends Widget_Base {
 		}
 
 		return $fallback;
+	}
+
+	/**
+	 * Sanitize hover effect value.
+	 */
+	private function sanitize_hover_effect( $effect ) {
+		$allowed = array( 'none', 'zoom', 'lift', 'fade' );
+		$effect = $effect ? strtolower( (string) $effect ) : 'none';
+
+		if ( in_array( $effect, $allowed, true ) ) {
+			return $effect;
+		}
+
+		return 'none';
 	}
 
 	/**
