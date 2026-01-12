@@ -673,7 +673,7 @@ class MJET_Post_Grid extends Widget_Base {
 			return;
 		}
 
-		$wrapper_classes = array( 'mjet-post-grid', 'mjet-post-grid--columns-' . $this->get_current_columns_class( $settings ) );
+		$wrapper_classes = array_map( 'sanitize_html_class', $this->build_grid_wrapper_classes( $settings ) );
 
 		echo '<div class="' . esc_attr( implode( ' ', array_unique( $wrapper_classes ) ) ) . '">';
 
@@ -953,14 +953,34 @@ class MJET_Post_Grid extends Widget_Base {
 	}
 
 	/**
-	 * Helper: get columns class.
+	 * Build responsive grid wrapper classes.
 	 */
-	private function get_current_columns_class( array $settings ) {
-		if ( isset( $settings['columns'] ) ) {
-			return $settings['columns'];
+	private function build_grid_wrapper_classes( array $settings ) {
+		$classes = array( 'mjet-post-grid' );
+
+		$desktop = $this->normalize_columns_value( isset( $settings['columns'] ) ? $settings['columns'] : null, '3' );
+		$tablet = $this->normalize_columns_value( isset( $settings['columns_tablet'] ) ? $settings['columns_tablet'] : null, $desktop );
+		$mobile = $this->normalize_columns_value( isset( $settings['columns_mobile'] ) ? $settings['columns_mobile'] : null, $tablet );
+
+		$classes[] = 'mjet-post-grid--columns-desktop-' . $desktop;
+		$classes[] = 'mjet-post-grid--columns-tablet-' . $tablet;
+		$classes[] = 'mjet-post-grid--columns-mobile-' . $mobile;
+
+		return $classes;
+	}
+
+	/**
+	 * Normalize column values to allowed range with fallback.
+	 */
+	private function normalize_columns_value( $value, $fallback ) {
+		$allowed = array( '1', '2', '3', '4' );
+		$value = (string) ( $value ?? '' );
+
+		if ( in_array( $value, $allowed, true ) ) {
+			return $value;
 		}
 
-		return '3';
+		return $fallback;
 	}
 
 	/**
