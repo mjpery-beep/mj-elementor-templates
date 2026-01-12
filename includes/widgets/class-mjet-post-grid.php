@@ -528,6 +528,22 @@ class MJET_Post_Grid extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'card_hover_effect',
+			array(
+				'label' => __( 'Hover Effect', 'mj-elementor-templates' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => array(
+					'none' => __( 'None', 'mj-elementor-templates' ),
+					'lift' => __( 'Lift', 'mj-elementor-templates' ),
+					'shadow' => __( 'Shadow Glow', 'mj-elementor-templates' ),
+					'scale' => __( 'Scale Up', 'mj-elementor-templates' ),
+				),
+				'default' => 'none',
+				'prefix_class' => 'mjet-post-grid--card-hover-',
+			)
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -592,7 +608,7 @@ class MJET_Post_Grid extends Widget_Base {
 				'label' => __( 'Color', 'mj-elementor-templates' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .mjet-post-grid__title a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .mjet-post-grid__title' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -603,7 +619,7 @@ class MJET_Post_Grid extends Widget_Base {
 				'label' => __( 'Hover Color', 'mj-elementor-templates' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .mjet-post-grid__title a:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .mjet-post-grid__link:hover .mjet-post-grid__title' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -704,7 +720,7 @@ class MJET_Post_Grid extends Widget_Base {
 				'label' => __( 'Hover Color', 'mj-elementor-templates' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .mjet-post-grid__read-more:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .mjet-post-grid__link:hover .mjet-post-grid__read-more' => 'color: {{VALUE}};',
 				),
 			)
 		);
@@ -744,7 +760,10 @@ class MJET_Post_Grid extends Widget_Base {
 	 * @param array $settings Widget settings.
 	 */
 	private function render_card( array $settings ) {
+		$permalink = get_permalink();
+
 		echo '<article class="mjet-post-grid__item">';
+		echo '<a class="mjet-post-grid__link" href="' . esc_url( $permalink ) . '">';
 
 		if ( 'yes' === $settings['show_image'] ) {
 			$this->render_thumbnail( $settings );
@@ -771,6 +790,7 @@ class MJET_Post_Grid extends Widget_Base {
 
 		echo '</div>';
 		echo '</div>';
+		echo '</a>';
 		echo '</article>';
 	}
 
@@ -872,9 +892,8 @@ class MJET_Post_Grid extends Widget_Base {
 		}
 
 		echo sprintf(
-			'<%1$s class="mjet-post-grid__title"><a href="%2$s">%3$s</a></%1$s>',
+			'<%1$s class="mjet-post-grid__title">%2$s</%1$s>',
 			esc_html( $tag ),
-			esc_url( get_permalink() ),
 			esc_html( $title )
 		);
 	}
@@ -936,11 +955,7 @@ class MJET_Post_Grid extends Widget_Base {
 			return;
 		}
 
-		echo sprintf(
-			'<a class="mjet-post-grid__read-more" href="%s">%s</a>',
-			esc_url( get_permalink() ),
-			esc_html( $label )
-		);
+		echo '<span class="mjet-post-grid__read-more" aria-hidden="true">' . esc_html( $label ) . '</span>';
 	}
 
 	/**
