@@ -36,6 +36,10 @@ class MJET_Widgets_Loader {
 			'file'  => 'includes/widgets/class-mjet-post-grid.php',
 			'class' => '\\MJET\\Widgets\\MJET_Post_Grid',
 		),
+		array(
+			'file'  => 'includes/widgets/class-mjet-pwa-install-button.php',
+			'class' => '\\MJET\\Widgets\\MJET_PWA_Install_Button',
+		),
 	);
 
 	/**
@@ -184,8 +188,9 @@ class MJET_Widgets_Loader {
 	 * Enregistrer les scripts.
 	 */
 	public function register_scripts() {
-		$nav_menu_version      = $this->get_asset_version( 'assets/js/mjet-nav-menu.js' );
+		$nav_menu_version         = $this->get_asset_version( 'assets/js/mjet-nav-menu.js' );
 		$container_sticky_version = $this->get_asset_version( 'assets/js/mjet-container-sticky.js' );
+		$pwa_install_version      = $this->get_asset_version( 'assets/js/mjet-pwa-install.js' );
 
 		wp_register_script(
 			'mjet-nav-menu',
@@ -202,16 +207,25 @@ class MJET_Widgets_Loader {
 			$container_sticky_version,
 			true
 		);
+
+		wp_register_script(
+			'mjet-pwa-install',
+			MJET_URL . 'assets/js/mjet-pwa-install.js',
+			array( 'elementor-frontend' ),
+			$pwa_install_version,
+			true
+		);
 	}
 
 	/**
 	 * Enregistrer les styles.
 	 */
 	public function register_styles() {
-		$nav_menu_version        = $this->get_asset_version( 'assets/css/mjet-nav-menu.css' );
+		$nav_menu_version         = $this->get_asset_version( 'assets/css/mjet-nav-menu.css' );
 		$container_sticky_version = $this->get_asset_version( 'assets/css/mjet-container-sticky.css' );
 		$youtube_version          = $this->get_asset_version( 'assets/css/mjet-youtube-channel.css' );
 		$post_grid_version        = $this->get_asset_version( 'assets/css/mjet-post-grid.css' );
+		$pwa_install_version      = $this->get_asset_version( 'assets/css/mjet-pwa-install.css' );
 
 		wp_register_style(
 			'mjet-nav-menu',
@@ -239,6 +253,13 @@ class MJET_Widgets_Loader {
 			MJET_URL . 'assets/css/mjet-post-grid.css',
 			array(),
 			$post_grid_version
+		);
+
+		wp_register_style(
+			'mjet-pwa-install',
+			MJET_URL . 'assets/css/mjet-pwa-install.css',
+			array(),
+			$pwa_install_version
 		);
 	}
 

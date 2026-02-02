@@ -1,0 +1,73 @@
+.mjet-pwa-install {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.75rem;
+}
+
+.elementor-widget-mjet-pwa-install-button.mjet-pwa-install-align-center .mjet-pwa-install {
+	align-items: center;
+	text-align: center;
+}
+
+.elementor-widget-mjet-pwa-install-button.mjet-pwa-install-align-right .mjet-pwa-install {
+	align-items: flex-end;
+	text-align: right;
+}
+
+.mjet-pwa-install__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.mjet-pwa-install__button .elementor-button-content-wrapper {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--mjet-pwa-install-icon-gap, 0.5rem);
+}
+
+.mjet-pwa-install__button:disabled,
+.mjet-pwa-install[data-state="unsupported"] .mjet-pwa-install__button {
+	cursor: not-allowed;
+}
+
+.mjet-pwa-install__button--loading {
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+.mjet-pwa-install__button--hidden {
+	display: none;
+}
+
+.mjet-pwa-install__label {
+	display: inline-flex;
+	align-items: center;
+}
+
+.mjet-pwa-install__icon {
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
+	font-size: var(--mjet-pwa-install-icon-size, 0.75rem);
+	color: currentColor;
+}
+
+.mjet-pwa-install__icon svg {
+	width: var(--mjet-pwa-install-icon-size, 0.75rem);
+	height: var(--mjet-pwa-install-icon-size, 0.75rem);
+	fill: currentColor;
+	stroke: currentColor;
+}
+
+.mjet-pwa-install__status {
+	margin: 0;
+	font-size: 0.875rem;
+}
+
+.mjet-pwa-install__status[hidden] {
+	display: none !important;
+}
