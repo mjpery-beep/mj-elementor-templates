@@ -63,7 +63,7 @@ class Widget_Conditions {
 	public function register_controls( Element_Base $element, $section_id ) {
 		if ( method_exists( $element, 'get_controls' ) ) {
 			$controls = $element->get_controls();
-			if ( isset( $controls['mjet_widget_show_only_logged_in'] ) ) {
+			if ( isset( $controls['mjet_widget_show_only_logged_in'] ) || isset( $controls['mjet_widget_show_only_logged_out'] ) ) {
 				return;
 			}
 		}
@@ -88,6 +88,18 @@ class Widget_Conditions {
 			)
 		);
 
+		$element->add_control(
+			'mjet_widget_show_only_logged_out',
+			array(
+				'label'        => __( "Afficher seulement si l'utilisateur est déconnecté", 'mj-elementor-templates' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
+				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'return_value' => 'yes',
+				'default'      => '',
+			)
+		);
+
 		$element->end_controls_section();
 	}
 
@@ -104,14 +116,23 @@ class Widget_Conditions {
 			return $content;
 		}
 
-		$settings = $element->get_settings_for_display();
-
 		if ( $this->should_display( $element ) ) {
 			return $content;
 		}
 
 		if ( $this->is_elementor_editor() ) {
-			return '<div class="elementor-alert elementor-alert-info">' . esc_html__( 'Ce widget est visible uniquement pour les utilisateurs connectés.', 'mj-elementor-templates' ) . '</div>';
+			$visibility = $this->get_visibility_requirements( $element );
+			$message    = esc_html__( "Ce widget est masqué par ses conditions d'affichage.", 'mj-elementor-templates' );
+
+			if ( $visibility['require_login'] && $visibility['require_logout'] ) {
+				$message = esc_html__( 'Ce widget combine des conditions incompatibles.', 'mj-elementor-templates' );
+			} elseif ( $visibility['require_login'] ) {
+				$message = esc_html__( 'Ce widget est visible uniquement pour les utilisateurs connectés.', 'mj-elementor-templates' );
+			} elseif ( $visibility['require_logout'] ) {
+				$message = esc_html__( 'Ce widget est visible uniquement pour les utilisateurs déconnectés.', 'mj-elementor-templates' );
+			}
+
+			return '<div class="elementor-alert elementor-alert-info">' . $message . '</div>';
 		}
 
 		return '';
@@ -170,24 +191,50 @@ class Widget_Conditions {
 	private function should_display( Element_Base $element ): bool {
 		$settings = array();
 
+		$visibility = $this->get_visibility_requirements( $element );
+
+		if ( $visibility['require_login'] && ! is_user_logged_in() ) {
+			return false;
+		}
+
+		if ( $visibility['require_logout'] && is_user_logged_in() ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Calcule les contraintes d'affichage associées à l'élément.
+	 *
+	 * @param Element_Base $element Élément Elementor en cours.
+	 *
+	 * @return array{
+	 *     require_login: bool,
+	 *     require_logout: bool,
+	 * }
+	 */
+	private function get_visibility_requirements( Element_Base $element ): array {
+		$settings = array();
+
 		if ( method_exists( $element, 'get_settings' ) ) {
 			$settings = (array) $element->get_settings();
 		}
 
-		if ( ( empty( $settings ) || ! array_key_exists( 'mjet_widget_show_only_logged_in', $settings ) ) && method_exists( $element, 'get_settings_for_display' ) ) {
+		if ( method_exists( $element, 'get_settings_for_display' ) ) {
 			$display_settings = (array) $element->get_settings_for_display();
-			if ( isset( $display_settings['mjet_widget_show_only_logged_in'] ) ) {
-				$settings['mjet_widget_show_only_logged_in'] = $display_settings['mjet_widget_show_only_logged_in'];
+
+			foreach ( array( 'mjet_widget_show_only_logged_in', 'mjet_widget_show_only_logged_out' ) as $key ) {
+				if ( ! array_key_exists( $key, $settings ) && isset( $display_settings[ $key ] ) ) {
+					$settings[ $key ] = $display_settings[ $key ];
+				}
 			}
 		}
 
-		$require_login = isset( $settings['mjet_widget_show_only_logged_in'] ) && 'yes' === $settings['mjet_widget_show_only_logged_in'];
-
-		if ( ! $require_login ) {
-			return true;
-		}
-
-		return is_user_logged_in();
+		return array(
+			'require_login'  => isset( $settings['mjet_widget_show_only_logged_in'] ) && 'yes' === $settings['mjet_widget_show_only_logged_in'],
+			'require_logout' => isset( $settings['mjet_widget_show_only_logged_out'] ) && 'yes' === $settings['mjet_widget_show_only_logged_out'],
+		);
 	}
 
 	/**
