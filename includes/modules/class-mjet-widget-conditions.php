@@ -1,6 +1,7 @@
 <?php
 /**
- * Conditions d'affichage Elementor.
+ * Conditions d'affichage Elementor basées sur le statut de connexion.
+ * Utilise des classes CSS pour un masquage instantané (sans cache).
  *
  * @package mj-elementor-templates
  */
@@ -8,17 +9,19 @@
 namespace MJET\Modules;
 
 use Elementor\Controls_Manager;
-use Elementor\Element_Base;
 use Elementor\Plugin;
+use Elementor\Element_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Ajoute une section Conditions à tous les widgets Elementor.
+ * Ajoute des conditions d'affichage connecté/déconnecté à tous les éléments Elementor.
+ * Fonctionne via CSS basé sur la classe body "logged-in" de WordPress.
  */
 class Widget_Conditions {
+
 	/**
 	 * Instance unique.
 	 *
@@ -33,70 +36,69 @@ class Widget_Conditions {
 		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
-
 		return self::$instance;
 	}
 
 	/**
-	 * Constructeur.
+	 * Constructeur privé.
 	 */
 	private function __construct() {
-		add_action( 'elementor/element/common/section_advanced/after_section_end', array( $this, 'register_controls' ), 10, 2 );
-		add_action( 'elementor/element/container/section_effects/after_section_end', array( $this, 'register_controls' ), 10, 2 );
-		add_action( 'elementor/element/section/section_advanced/after_section_end', array( $this, 'register_controls' ), 10, 2 );
-		add_action( 'elementor/element/column/section_advanced/after_section_end', array( $this, 'register_controls' ), 10, 2 );
-		add_filter( 'elementor/frontend/widget/should_render', array( $this, 'filter_should_render' ), 10, 2 );
-		add_filter( 'elementor/frontend/section/should_render', array( $this, 'filter_should_render' ), 10, 2 );
-		add_filter( 'elementor/frontend/column/should_render', array( $this, 'filter_should_render' ), 10, 2 );
-		add_filter( 'elementor/frontend/container/should_render', array( $this, 'filter_should_render' ), 10, 2 );
-		add_filter( 'elementor/frontend/element/should_render', array( $this, 'filter_should_render' ), 10, 2 );
-		add_action( 'elementor/frontend/element/before_render', array( $this, 'maybe_hide_element' ), 10, 1 );
-		add_filter( 'elementor/widget/render_content', array( $this, 'filter_widget_output' ), 10, 2 );
+		// Enregistrement des contrôles via hooks spécifiques.
+		add_action( 'elementor/element/column/section_advanced/after_section_end', array( $this, 'add_condition_fields' ), 10, 2 );
+		add_action( 'elementor/element/section/section_advanced/after_section_end', array( $this, 'add_condition_fields' ), 10, 2 );
+		add_action( 'elementor/element/common/_section_style/after_section_end', array( $this, 'add_condition_fields' ), 10, 2 );
+		add_action( 'elementor/element/container/section_layout/after_section_end', array( $this, 'add_condition_fields' ), 10, 2 );
+
+		// Ajouter la classe CSS sur l'élément avant le rendu.
+		add_action( 'elementor/frontend/widget/before_render', array( $this, 'add_render_attributes' ), 10, 1 );
+		add_action( 'elementor/frontend/section/before_render', array( $this, 'add_render_attributes' ), 10, 1 );
+		add_action( 'elementor/frontend/column/before_render', array( $this, 'add_render_attributes' ), 10, 1 );
+		add_action( 'elementor/frontend/container/before_render', array( $this, 'add_render_attributes' ), 10, 1 );
+
+		// Injecter le CSS dans le frontend.
+		add_action( 'wp_head', array( $this, 'print_frontend_css' ), 100 );
 	}
 
 	/**
-	 * Ajoute la section Conditions dans l'onglet Avancé.
+	 * Ajoute les champs de condition dans l'onglet Avancé.
 	 *
-	 * @param Element_Base $element    Widget courant.
-	 * @param string       $section_id Identifiant de la section.
+	 * @param mixed  $element    Élément Elementor.
+	 * @param string $section_id ID de la section.
 	 */
-	public function register_controls( Element_Base $element, $section_id ) {
-		if ( method_exists( $element, 'get_controls' ) ) {
-			$controls = $element->get_controls();
-			if ( isset( $controls['mjet_widget_show_only_logged_in'] ) || isset( $controls['mjet_widget_show_only_logged_out'] ) ) {
-				return;
-			}
-		}
-
+	public function add_condition_fields( $element, $section_id = null ): void {
 		$element->start_controls_section(
-			'mjet_widget_conditions_section',
+			'mjet_user_conditions_section',
 			array(
-				'label' => __( 'Conditions', 'mj-elementor-templates' ),
 				'tab'   => Controls_Manager::TAB_ADVANCED,
+				'label' => __( 'Conditions Utilisateur', 'mj-elementor-templates' ),
 			)
 		);
 
 		$element->add_control(
-			'mjet_widget_show_only_logged_in',
+			'mjet_user_condition',
 			array(
-				'label'        => __( "Afficher seulement si l'utilisateur est connecté", 'mj-elementor-templates' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
-				'return_value' => 'yes',
+				'label'        => __( 'Afficher pour', 'mj-elementor-templates' ),
+				'type'         => Controls_Manager::SELECT,
 				'default'      => '',
+				'options'      => array(
+					''           => __( 'Tous les visiteurs', 'mj-elementor-templates' ),
+					'logged_in'  => __( 'Utilisateurs connectés uniquement', 'mj-elementor-templates' ),
+					'logged_out' => __( 'Visiteurs déconnectés uniquement', 'mj-elementor-templates' ),
+				),
+				'render_type'  => 'template',
+				'prefix_class' => 'mjet-show-',
 			)
 		);
 
 		$element->add_control(
-			'mjet_widget_show_only_logged_out',
+			'mjet_condition_info',
 			array(
-				'label'        => __( "Afficher seulement si l'utilisateur est déconnecté", 'mj-elementor-templates' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
-				'return_value' => 'yes',
-				'default'      => '',
+				'type'            => Controls_Manager::RAW_HTML,
+				'raw'             => __( 'L\'élément sera masqué/affiché instantanément selon l\'état de connexion (pas de cache).', 'mj-elementor-templates' ),
+				'content_classes' => 'elementor-descriptor',
+				'condition'       => array(
+					'mjet_user_condition!' => '',
+				),
 			)
 		);
 
@@ -104,157 +106,48 @@ class Widget_Conditions {
 	}
 
 	/**
-	 * Masque le widget si nécessaire.
+	 * Ajoute les attributs de rendu (classe CSS) sur l'élément.
 	 *
-	 * @param string       $content Contenu HTML du widget.
-	 * @param Element_Base $element Instance du widget.
-	 *
-	 * @return string
+	 * @param Element_Base $element Élément Elementor.
 	 */
-	public function filter_widget_output( $content, $element ) {
-		if ( ! $element instanceof Element_Base ) {
-			return $content;
-		}
+	public function add_render_attributes( $element ): void {
+		$settings  = $element->get_settings_for_display();
+		$condition = isset( $settings['mjet_user_condition'] ) ? $settings['mjet_user_condition'] : '';
 
-		if ( $this->should_display( $element ) ) {
-			return $content;
-		}
-
-		if ( $this->is_elementor_editor() ) {
-			$visibility = $this->get_visibility_requirements( $element );
-			$message    = esc_html__( "Ce widget est masqué par ses conditions d'affichage.", 'mj-elementor-templates' );
-
-			if ( $visibility['require_login'] && $visibility['require_logout'] ) {
-				$message = esc_html__( 'Ce widget combine des conditions incompatibles.', 'mj-elementor-templates' );
-			} elseif ( $visibility['require_login'] ) {
-				$message = esc_html__( 'Ce widget est visible uniquement pour les utilisateurs connectés.', 'mj-elementor-templates' );
-			} elseif ( $visibility['require_logout'] ) {
-				$message = esc_html__( 'Ce widget est visible uniquement pour les utilisateurs déconnectés.', 'mj-elementor-templates' );
-			}
-
-			return '<div class="elementor-alert elementor-alert-info">' . $message . '</div>';
-		}
-
-		return '';
-	}
-
-	/**
-	 * Filtre should_render des éléments Elementor.
-	 *
-	 * @param bool         $should_render Valeur actuelle.
-	 * @param Element_Base $element       Élément en cours.
-	 *
-	 * @return bool
-	 */
-	public function filter_should_render( $should_render, Element_Base $element ) {
-		if ( ! $should_render ) {
-			return false;
-		}
-
-		if ( $this->should_display( $element ) ) {
-			return true;
-		}
-
-		return $this->is_elementor_editor();
-	}
-
-	/**
-	 * Intercepte le rendu pour les éléments non autorisés.
-	 *
-	 * @param Element_Base $element Élément Elementor en cours.
-	 */
-	public function maybe_hide_element( Element_Base $element ): void {
-		if ( $this->is_elementor_editor() ) {
+		if ( empty( $condition ) ) {
 			return;
 		}
 
-		if ( $this->should_display( $element ) ) {
-			return;
-		}
-
-		if ( method_exists( $element, 'set_should_render' ) ) {
-			$element->set_should_render( false );
-		}
-
-		if ( method_exists( $element, 'add_render_attribute' ) ) {
-			$element->add_render_attribute( '_wrapper', 'style', 'display:none !important;' );
-		}
+		// Ajouter une classe pour identifier les éléments avec condition.
+		$element->add_render_attribute( '_wrapper', 'class', 'mjet-has-condition' );
 	}
 
 	/**
-	 * Détermine si l'élément doit être affiché.
-	 *
-	 * @param Element_Base $element Élément Elementor en cours.
-	 *
-	 * @return bool
+	 * Imprime le CSS pour gérer la visibilité basée sur la classe body "logged-in".
+	 * WordPress ajoute automatiquement la classe "logged-in" au body quand l'utilisateur est connecté.
 	 */
-	private function should_display( Element_Base $element ): bool {
-		$settings = array();
-
-		$visibility = $this->get_visibility_requirements( $element );
-
-		if ( $visibility['require_login'] && ! is_user_logged_in() ) {
-			return false;
-		}
-
-		if ( $visibility['require_logout'] && is_user_logged_in() ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Calcule les contraintes d'affichage associées à l'élément.
-	 *
-	 * @param Element_Base $element Élément Elementor en cours.
-	 *
-	 * @return array{
-	 *     require_login: bool,
-	 *     require_logout: bool,
-	 * }
-	 */
-	private function get_visibility_requirements( Element_Base $element ): array {
-		$settings = array();
-
-		if ( method_exists( $element, 'get_settings' ) ) {
-			$settings = (array) $element->get_settings();
-		}
-
-		if ( method_exists( $element, 'get_settings_for_display' ) ) {
-			$display_settings = (array) $element->get_settings_for_display();
-
-			foreach ( array( 'mjet_widget_show_only_logged_in', 'mjet_widget_show_only_logged_out' ) as $key ) {
-				if ( ! array_key_exists( $key, $settings ) && isset( $display_settings[ $key ] ) ) {
-					$settings[ $key ] = $display_settings[ $key ];
-				}
+	public function print_frontend_css(): void {
+		// Ne pas afficher dans l'éditeur.
+		if ( class_exists( '\Elementor\Plugin' ) ) {
+			if ( ! empty( Plugin::$instance->editor ) && Plugin::$instance->editor->is_edit_mode() ) {
+				return;
+			}
+			if ( ! empty( Plugin::$instance->preview ) && Plugin::$instance->preview->is_preview_mode() ) {
+				return;
 			}
 		}
-
-		return array(
-			'require_login'  => isset( $settings['mjet_widget_show_only_logged_in'] ) && 'yes' === $settings['mjet_widget_show_only_logged_in'],
-			'require_logout' => isset( $settings['mjet_widget_show_only_logged_out'] ) && 'yes' === $settings['mjet_widget_show_only_logged_out'],
-		);
-	}
-
-	/**
-	 * Détecte le mode éditeur Elementor.
-	 */
-	private function is_elementor_editor(): bool {
-		if ( ! class_exists( '\\Elementor\\Plugin' ) ) {
-			return false;
-		}
-
-		$plugin = Plugin::$instance;
-
-		if ( isset( $plugin->editor ) && method_exists( $plugin->editor, 'is_edit_mode' ) && $plugin->editor->is_edit_mode() ) {
-			return true;
-		}
-
-		if ( isset( $plugin->preview ) && method_exists( $plugin->preview, 'is_preview_mode' ) && $plugin->preview->is_preview_mode() ) {
-			return true;
-		}
-
-		return false;
+		?>
+		<style id="mjet-user-conditions-css">
+			/* Masquer les éléments "connectés uniquement" quand l'utilisateur n'est PAS connecté */
+			body:not(.logged-in) .mjet-show-logged_in {
+				display: none !important;
+			}
+			
+			/* Masquer les éléments "déconnectés uniquement" quand l'utilisateur EST connecté */
+			body.logged-in .mjet-show-logged_out {
+				display: none !important;
+			}
+		</style>
+		<?php
 	}
 }

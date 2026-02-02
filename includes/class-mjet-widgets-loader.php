@@ -78,7 +78,8 @@ class MJET_Widgets_Loader {
 		add_action( 'elementor/frontend/after_register_styles', array( $this, 'register_styles' ) );
 		add_action( 'elementor/frontend/after_enqueue_styles', array( $this, 'enqueue_styles' ) );
 
-		$this->bootstrap_extensions();
+		// Charger les extensions dès que possible mais après Elementor init.
+		add_action( 'elementor/init', array( $this, 'bootstrap_extensions' ) );
 	}
 
 	/**
@@ -283,7 +284,7 @@ class MJET_Widgets_Loader {
 	/**
 	 * Charge les extensions front/back additionnelles.
 	 */
-	private function bootstrap_extensions() {
+	public function bootstrap_extensions() {
 		$this->maybe_include_widget_file( 'includes/modules/class-mjet-container-sticky.php' );
 
 		if ( class_exists( '\\MJET\\Modules\\Container_Sticky' ) ) {
