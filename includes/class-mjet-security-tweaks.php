@@ -18,13 +18,47 @@ class MJET_Security_Tweaks {
      * Register hooks.
      */
     public static function init() {
+        /**
+         * Remove unnecessary discovery links that expose implementation details.
+         * For comprehensive security hardening, consider using a dedicated security plugin that offers features like firewall, malware scanning, and login protection.
+         */
         add_action( 'init', array( __CLASS__, 'harden_head' ), 0 );
+        /**
+         * Hide WordPress version to prevent targeted attacks based on known vulnerabilities.
+         * Note: This is a basic obfuscation technique and should not be solely relied upon for security. Always keep WordPress and plugins updated.
+         */
         add_filter( 'the_generator', '__return_empty_string' );
+        /**
+         * Replace detailed login errors with a generic message to prevent username enumeration and information disclosure.
+         * For enhanced login security, consider implementing features like two-factor authentication and login attempt limits using a dedicated security plugin.
+         */
         add_filter( 'login_errors', array( __CLASS__, 'filter_login_errors' ) );
+        /**
+         * Add protective HTTP headers and hide pingback endpoint.
+         * Note: For comprehensive security hardening, consider using a dedicated security plugin that offers features like firewall, malware scanning, and login protection.
+         */
         add_filter( 'wp_headers', array( __CLASS__, 'filter_headers' ) );
+        /**
+         * Disable XML-RPC to prevent abuse and potential vulnerabilities.
+         * If XML-RPC is needed for specific features, consider using a plugin that selectively enables it with proper security measures.
+         */
         add_filter( 'xmlrpc_enabled', '__return_false' );
+        /** 
+         * Disable author archive access to prevent user enumeration via ?author=N 
+         * */
         add_action( 'template_redirect', array( __CLASS__, 'block_author_enumeration' ), 1 );
+        /**
+         * Restrict REST API user endpoints to authenticated users with proper capabilities.
+         * This prevents user enumeration and exposure of user data via the REST API.
+         */
         add_filter( 'rest_endpoints', array( __CLASS__, 'restrict_rest_user_endpoints' ) );
+        /** 
+         * Disable URL guessing on 404s to prevent unwanted redirects and potential information disclosure.
+         * Also ensure proper 404 status and headers to prevent service worker caching issues.
+         */
+        add_filter( 'redirect_canonical', array( __CLASS__, 'disable_url_guessing' ) );
+        add_filter( 'redirect_guess_404_permalink', '__return_false' );
+        add_action( 'template_redirect', array( __CLASS__, 'handle_404_headers' ), 0 );
     }
 
     /**
@@ -115,5 +149,32 @@ class MJET_Security_Tweaks {
         unset( $endpoints['/wp/v2/users/me'] );
 
         return $endpoints;
+    }
+
+    /**
+     * Disable WordPress URL guessing on 404 pages.
+     *
+     * Prevents WordPress from automatically redirecting to similar URLs,
+     * which can cause unwanted behavior and potential security issues.
+     *
+     * @param string|false $redirect_url The redirect URL.
+     * @return string|false
+     */
+    public static function disable_url_guessing( $redirect_url ) {
+        if ( is_404() ) {
+            return false;
+        }
+
+        return $redirect_url;
+    }
+
+    /**
+     * Ensure 404 pages return proper status and headers to prevent service worker caching.
+     */
+    public static function handle_404_headers() {
+        if ( is_404() ) {
+            status_header( 404 );
+            nocache_headers();
+        }
     }
 }

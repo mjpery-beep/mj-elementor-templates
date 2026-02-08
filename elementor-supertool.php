@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: MJ Elementor Templates
+ * Plugin Name: Elementor SuperTool
  * Plugin URI:  https://www.mj-pery.be
- * Description: Créez des en-têtes, pieds de page et blocs personnalisés avec Elementor et affichez-les sur votre site. Équivalent simplifié de UAE Header Footer Builder.
+ * Description: Étendez Elementor avec des fonctionnalités avancées : headers/footers personnalisés, conditions d'affichage utilisateur, widgets supplémentaires et plus encore.
  * Author:      MJ Pery
  * Author URI:  https://www.mj-pery.be
- * Text Domain: mj-elementor-templates
+ * Text Domain: elementor-supertool
  * Domain Path: /languages
  * Version:     1.0.0
  * Requires at least: 5.8
@@ -14,28 +14,35 @@
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'MJET_VERSION', '1.0.0' );
-define( 'MJET_FILE', __FILE__ );
-define( 'MJET_DIR', plugin_dir_path( __FILE__ ) );
-define( 'MJET_URL', plugins_url( '/', __FILE__ ) );
-define( 'MJET_PATH', plugin_basename( __FILE__ ) );
+define( 'EST_VERSION', '1.0.0' );
+define( 'EST_FILE', __FILE__ );
+define( 'EST_DIR', plugin_dir_path( __FILE__ ) );
+define( 'EST_URL', plugins_url( '/', __FILE__ ) );
+define( 'EST_PATH', plugin_basename( __FILE__ ) );
+
+// Aliases pour compatibilité avec l'ancien code.
+define( 'MJET_VERSION', EST_VERSION );
+define( 'MJET_FILE', EST_FILE );
+define( 'MJET_DIR', EST_DIR );
+define( 'MJET_URL', EST_URL );
+define( 'MJET_PATH', EST_PATH );
 
 /**
- * Classe principale du plugin MJ Elementor Templates.
+ * Classe principale du plugin Elementor SuperTool.
  */
-final class MJ_Elementor_Templates {
+final class Elementor_SuperTool {
 
 	/**
 	 * Instance unique.
 	 *
-	 * @var MJ_Elementor_Templates|null
+	 * @var Elementor_SuperTool|null
 	 */
 	private static $instance = null;
 
@@ -56,7 +63,7 @@ final class MJ_Elementor_Templates {
 	/**
 	 * Retourne l'instance unique.
 	 *
-	 * @return MJ_Elementor_Templates
+	 * @return Elementor_SuperTool
 	 */
 	public static function instance() {
 		if ( is_null( self::$instance ) ) {
@@ -80,6 +87,9 @@ final class MJ_Elementor_Templates {
 			add_action( 'admin_notices', array( $this, 'elementor_missing_notice' ) );
 			return;
 		}
+
+		// Fix temporaire pour Elementor 3.35+ - scripts V2 manquants.
+		$this->fix_elementor_v2_scripts();
 
 		self::$elementor_instance = \Elementor\Plugin::instance();
 
@@ -140,6 +150,48 @@ final class MJ_Elementor_Templates {
 			mjet_apply_default_display_rules();
 			update_option( 'mjet_template_fix_version', '1.0.2' );
 		}
+	}
+
+	/**
+	 * Fix temporaire pour Elementor 3.35+ - Enregistre les scripts V2 manquants
+	 * pour éviter l'erreur "dependencies that are not registered".
+	 *
+	 * @todo Supprimer ce fix quand Elementor corrige le bug.
+	 */
+	private function fix_elementor_v2_scripts() {
+		$missing_scripts = array(
+			'elementor-v2-editor-canvas',
+			'elementor-v2-editor-controls',
+			'elementor-v2-editor-editing-panel',
+			'elementor-v2-editor-elements',
+			'elementor-v2-editor-props',
+			'elementor-v2-editor-styles-repository',
+		);
+
+		// Enregistrer les scripts manquants avant qu'Elementor ne charge l'éditeur.
+		add_action( 'elementor/editor/before_enqueue_scripts', function() use ( $missing_scripts ) {
+			foreach ( $missing_scripts as $handle ) {
+				if ( ! wp_script_is( $handle, 'registered' ) ) {
+					wp_register_script( $handle, false, array(), null, true );
+				}
+			}
+		}, 1 );
+
+		add_action( 'admin_enqueue_scripts', function() use ( $missing_scripts ) {
+			foreach ( $missing_scripts as $handle ) {
+				if ( ! wp_script_is( $handle, 'registered' ) ) {
+					wp_register_script( $handle, false, array(), null, true );
+				}
+			}
+		}, 0 );
+
+		// Supprime le warning Elementor V2 scripts (doing_it_wrong notice).
+		add_filter( 'doing_it_wrong_trigger_error', function( $trigger, $function_name, $message ) {
+			if ( strpos( $message, 'elementor-v2-editor' ) !== false ) {
+				return false;
+			}
+			return $trigger;
+		}, 10, 3 );
 	}
 
 	/**
@@ -391,8 +443,8 @@ final class MJ_Elementor_Templates {
 
 		$message = sprintf(
 			/* translators: %1$s: plugin name, %2$s: Elementor */
-			__( 'Le plugin %1$s requiert %2$s pour fonctionner.', 'mj-elementor-templates' ),
-			'<strong>MJ Elementor Templates</strong>',
+			__( 'Le plugin %1$s requiert %2$s pour fonctionner.', 'elementor-supertool' ),
+			'<strong>Elementor SuperTool</strong>',
 			'<strong>Elementor</strong>'
 		);
 
@@ -404,9 +456,12 @@ final class MJ_Elementor_Templates {
  * Initialiser le plugin.
  */
 function mjet_init() {
-	MJ_Elementor_Templates::instance();
+	Elementor_SuperTool::instance();
 }
 add_action( 'plugins_loaded', 'mjet_init' );
+
+// Alias pour compatibilité arrière.
+class_alias( 'Elementor_SuperTool', 'MJ_Elementor_Templates' );
 
 /**
  * Actions à l'activation.
