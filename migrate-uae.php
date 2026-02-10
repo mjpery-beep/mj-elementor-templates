@@ -3,9 +3,9 @@
  * Script de migration directe des templates UAE vers MJET.
  * À exécuter une seule fois via wp-cli ou en incluant dans functions.php temporairement.
  *
- * Usage: wp eval-file wp-content/plugins/mj-elementor-templates/migrate-uae.php
+ * Usage: wp eval-file wp-content/plugins/elementor-supertool/migrate-uae.php
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 // Charger WordPress si pas déjà chargé.
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function mjet_run_migration() {
 	global $wpdb;
 
-	echo "=== Migration des templates UAE vers MJ Elementor Templates ===\n\n";
+	echo "=== Migration des templates UAE vers Elementor Supertool ===\n\n";
 
 	// Récupérer tous les templates UAE.
 	$uae_templates = get_posts(
@@ -109,9 +109,9 @@ function mjet_run_migration() {
 
 	if ( $migrated > 0 ) {
 		echo "\nVous pouvez maintenant:\n";
-		echo "1. Activer le plugin MJ Elementor Templates\n";
+		echo "1. Activer le plugin Elementor Supertool\n";
 		echo "2. Désactiver le plugin UAE (Header Footer Elementor)\n";
-		echo "3. Vérifier vos templates dans MJ Templates > Tous les templates\n";
+		echo "3. Vérifier vos templates dans Supertool > Tous les templates\n";
 	}
 }
 

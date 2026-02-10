@@ -2,7 +2,7 @@
 /**
  * Configurer les templates MJET pour affichage global.
  *
- * Accès via: /wp-content/plugins/mj-elementor-templates/setup-templates.php?key=mjet_setup
+ * Accès via: /wp-content/plugins/elementor-supertool/setup-templates.php?key=mjet_setup
  */
 
 require_once dirname( __DIR__, 3 ) . '/wp-load.php';

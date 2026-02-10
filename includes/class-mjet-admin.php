@@ -1,8 +1,8 @@
 <?php
 /**
- * Admin pour MJ Elementor Templates.
+ * Admin pour Elementor Supertool.
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -40,17 +40,17 @@ class MJET_Admin {
 	 */
 	private function get_template_type_options() {
 		$types = array(
-			'type_header'           => __( 'Header', 'mj-elementor-templates' ),
-			'type_before_footer'    => __( 'Before Footer', 'mj-elementor-templates' ),
-			'type_footer'           => __( 'Footer', 'mj-elementor-templates' ),
-			'custom'                => __( 'Custom Block', 'mj-elementor-templates' ),
-			'type_single_page'      => __( 'Single Page', 'mj-elementor-templates' ),
-			'type_single_post'      => __( 'Single Post', 'mj-elementor-templates' ),
-			'type_archive'          => __( 'Archive', 'mj-elementor-templates' ),
-			'type_search'           => __( 'Search Results Page', 'mj-elementor-templates' ),
-			'type_single_product'   => __( 'Produit (WooCommerce)', 'mj-elementor-templates' ),
-			'type_products_archive' => __( 'Products Archive', 'mj-elementor-templates' ),
-			'type_404'              => __( '404 Page', 'mj-elementor-templates' ),
+			'type_header'           => __( 'Header', 'elementor-supertool' ),
+			'type_before_footer'    => __( 'Before Footer', 'elementor-supertool' ),
+			'type_footer'           => __( 'Footer', 'elementor-supertool' ),
+			'custom'                => __( 'Custom Block', 'elementor-supertool' ),
+			'type_single_page'      => __( 'Single Page', 'elementor-supertool' ),
+			'type_single_post'      => __( 'Single Post', 'elementor-supertool' ),
+			'type_archive'          => __( 'Archive', 'elementor-supertool' ),
+			'type_search'           => __( 'Search Results Page', 'elementor-supertool' ),
+			'type_single_product'   => __( 'Produit (WooCommerce)', 'elementor-supertool' ),
+			'type_products_archive' => __( 'Products Archive', 'elementor-supertool' ),
+			'type_404'              => __( '404 Page', 'elementor-supertool' ),
 		);
 
 		if ( ! post_type_exists( 'product' ) ) {
@@ -280,19 +280,19 @@ class MJET_Admin {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'               => __( 'Templates Elementor', 'mj-elementor-templates' ),
-			'singular_name'      => __( 'Template Elementor', 'mj-elementor-templates' ),
-			'menu_name'          => __( 'MJ Templates', 'mj-elementor-templates' ),
-			'name_admin_bar'     => __( 'Template Elementor', 'mj-elementor-templates' ),
-			'add_new'            => __( 'Ajouter', 'mj-elementor-templates' ),
-			'add_new_item'       => __( 'Ajouter un template', 'mj-elementor-templates' ),
-			'new_item'           => __( 'Nouveau template', 'mj-elementor-templates' ),
-			'edit_item'          => __( 'Modifier le template', 'mj-elementor-templates' ),
-			'view_item'          => __( 'Voir le template', 'mj-elementor-templates' ),
-			'all_items'          => __( 'Tous les templates', 'mj-elementor-templates' ),
-			'search_items'       => __( 'Rechercher des templates', 'mj-elementor-templates' ),
-			'not_found'          => __( 'Aucun template trouvé.', 'mj-elementor-templates' ),
-			'not_found_in_trash' => __( 'Aucun template dans la corbeille.', 'mj-elementor-templates' ),
+			'name'               => __( 'Templates Elementor', 'elementor-supertool' ),
+			'singular_name'      => __( 'Template Elementor', 'elementor-supertool' ),
+			'menu_name'          => __( 'Supertool Templates', 'elementor-supertool' ),
+			'name_admin_bar'     => __( 'Template Elementor', 'elementor-supertool' ),
+			'add_new'            => __( 'Ajouter', 'elementor-supertool' ),
+			'add_new_item'       => __( 'Ajouter un template', 'elementor-supertool' ),
+			'new_item'           => __( 'Nouveau template', 'elementor-supertool' ),
+			'edit_item'          => __( 'Modifier le template', 'elementor-supertool' ),
+			'view_item'          => __( 'Voir le template', 'elementor-supertool' ),
+			'all_items'          => __( 'Tous les templates', 'elementor-supertool' ),
+			'search_items'       => __( 'Rechercher des templates', 'elementor-supertool' ),
+			'not_found'          => __( 'Aucun template trouvé.', 'elementor-supertool' ),
+			'not_found_in_trash' => __( 'Aucun template dans la corbeille.', 'elementor-supertool' ),
 		);
 
 		$args = array(
@@ -333,8 +333,8 @@ class MJET_Admin {
 	 */
 	public function register_admin_menu() {
 		add_menu_page(
-			__( 'MJ Templates', 'mj-elementor-templates' ),
-			__( 'MJ Templates', 'mj-elementor-templates' ),
+			__( 'Supertool Templates', 'elementor-supertool' ),
+			__( 'Supertool Templates', 'elementor-supertool' ),
 			'manage_options',
 			'mjet-templates',
 			array( $this, 'render_settings_page' ),
@@ -344,8 +344,8 @@ class MJET_Admin {
 
 		add_submenu_page(
 			'mjet-templates',
-			__( 'Gestionnaire de thème', 'mj-elementor-templates' ),
-			__( 'Gestionnaire de thème', 'mj-elementor-templates' ),
+			__( 'Gestionnaire de thème', 'elementor-supertool' ),
+			__( 'Gestionnaire de thème', 'elementor-supertool' ),
 			'manage_options',
 			'mjet-theme-manager',
 			array( $this, 'render_theme_manager_page' )
@@ -353,16 +353,16 @@ class MJET_Admin {
 
 		add_submenu_page(
 			'mjet-templates',
-			__( 'Tous les templates', 'mj-elementor-templates' ),
-			__( 'Tous les templates', 'mj-elementor-templates' ),
+			__( 'Tous les templates', 'elementor-supertool' ),
+			__( 'Tous les templates', 'elementor-supertool' ),
 			'manage_options',
 			'edit.php?post_type=mjet-template'
 		);
 
 		add_submenu_page(
 			'mjet-templates',
-			__( 'Ajouter', 'mj-elementor-templates' ),
-			__( 'Ajouter', 'mj-elementor-templates' ),
+			__( 'Ajouter', 'elementor-supertool' ),
+			__( 'Ajouter', 'elementor-supertool' ),
 			'manage_options',
 			'post-new.php?post_type=mjet-template'
 		);
@@ -379,23 +379,23 @@ class MJET_Admin {
 		<div class="wrap mjet-theme-manager">
 			<header class="mjet-theme-manager__header">
 				<div>
-					<h1><?php esc_html_e( 'Gestionnaire de thème', 'mj-elementor-templates' ); ?></h1>
+					<h1><?php esc_html_e( 'Gestionnaire de thème', 'elementor-supertool' ); ?></h1>
 					<p class="description">
-						<?php esc_html_e( 'Attribuez et surveillez les templates MJET utilisés pour les headers, pages singulières, archives ou pages WooCommerce.', 'mj-elementor-templates' ); ?>
+						<?php esc_html_e( 'Attribuez et surveillez les templates Supertool utilisés pour les headers, pages singulières, archives ou pages WooCommerce.', 'elementor-supertool' ); ?>
 					</p>
 				</div>
 				<form class="mjet-theme-manager__actions-bar" method="get" action="<?php echo esc_url( admin_url( 'post-new.php' ) ); ?>">
 					<input type="hidden" name="post_type" value="mjet-template">
-					<label for="mjet_new_template_type" class="screen-reader-text"><?php esc_html_e( 'Ajouter un template pour', 'mj-elementor-templates' ); ?></label>
+					<label for="mjet_new_template_type" class="screen-reader-text"><?php esc_html_e( 'Ajouter un template pour', 'elementor-supertool' ); ?></label>
 					<select name="mjet_type" id="mjet_new_template_type" class="mjet-theme-manager__create-select">
-						<option value=""><?php esc_html_e( 'Créer pour…', 'mj-elementor-templates' ); ?></option>
+						<option value=""><?php esc_html_e( 'Créer pour…', 'elementor-supertool' ); ?></option>
 						<?php foreach ( $template_types as $create_key => $create_label ) : ?>
 							<option value="<?php echo esc_attr( $create_key ); ?>"><?php echo esc_html( $create_label ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<button type="submit" class="button button-primary">
 						<span class="dashicons dashicons-plus"></span>
-						<?php esc_html_e( 'Ajouter', 'mj-elementor-templates' ); ?>
+						<?php esc_html_e( 'Ajouter', 'elementor-supertool' ); ?>
 					</button>
 				</form>
 			</header>
@@ -437,21 +437,21 @@ class MJET_Admin {
 								<div class="mjet-theme-manager__card-heading">
 									<span class="mjet-theme-manager__card-title"><?php echo esc_html( $type_label ); ?></span>
 									<?php if ( in_array( $type_key, array( 'type_header', 'type_footer', 'type_before_footer' ), true ) ) : ?>
-										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--primary"><?php esc_html_e( 'Structure', 'mj-elementor-templates' ); ?></span>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--primary"><?php esc_html_e( 'Structure', 'elementor-supertool' ); ?></span>
 									<?php elseif ( in_array( $type_key, array( 'type_single_page', 'type_single_post', 'type_single_product' ), true ) ) : ?>
-										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--info"><?php esc_html_e( 'Singulier', 'mj-elementor-templates' ); ?></span>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--info"><?php esc_html_e( 'Singulier', 'elementor-supertool' ); ?></span>
 									<?php else : ?>
-										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--muted"><?php esc_html_e( 'Archive', 'mj-elementor-templates' ); ?></span>
+										<span class="mjet-theme-manager__badge mjet-theme-manager__badge--muted"><?php esc_html_e( 'Archive', 'elementor-supertool' ); ?></span>
 									<?php endif; ?>
 								</div>
 								<div class="mjet-theme-manager__card-actions">
 									<a class="button button-small" href="<?php echo esc_url( $create_link ); ?>">
 										<span class="dashicons dashicons-plus"></span>
-										<?php esc_html_e( 'Nouveau', 'mj-elementor-templates' ); ?>
+										<?php esc_html_e( 'Nouveau', 'elementor-supertool' ); ?>
 									</a>
 									<a class="button button-link" href="<?php echo esc_url( $list_link ); ?>">
 										<span class="dashicons dashicons-filter"></span>
-										<?php esc_html_e( 'Filtrer la liste', 'mj-elementor-templates' ); ?>
+										<?php esc_html_e( 'Filtrer la liste', 'elementor-supertool' ); ?>
 									</a>
 								</div>
 							</header>
@@ -474,12 +474,12 @@ class MJET_Admin {
 											}
 
 											if ( empty( $include_rules ) ) {
-												$include_rules[] = __( 'Aucune règle définie', 'mj-elementor-templates' );
+												$include_rules[] = __( 'Aucune règle définie', 'elementor-supertool' );
 											}
 
 											if ( ! empty( $include['specific'] ) && is_array( $include['specific'] ) ) {
 												$include_rules[] = sprintf(
-													_n( '%d page spécifique', '%d pages spécifiques', count( $include['specific'] ), 'mj-elementor-templates' ),
+													_n( '%d page spécifique', '%d pages spécifiques', count( $include['specific'] ), 'elementor-supertool' ),
 													count( $include['specific'] )
 												);
 											}
@@ -493,17 +493,17 @@ class MJET_Admin {
 
 											if ( ! empty( $exclude['specific'] ) && is_array( $exclude['specific'] ) ) {
 												$exclude_rules[] = sprintf(
-													_n( '%d page exclue', '%d pages exclues', count( $exclude['specific'] ), 'mj-elementor-templates' ),
+													_n( '%d page exclue', '%d pages exclues', count( $exclude['specific'] ), 'elementor-supertool' ),
 													count( $exclude['specific'] )
 												);
 											}
 
-											$roles_summary = __( 'Tous les utilisateurs', 'mj-elementor-templates' );
+											$roles_summary = __( 'Tous les utilisateurs', 'elementor-supertool' );
 											if ( ! empty( $user_roles ) && is_array( $user_roles ) ) {
 												$roles_labels = array();
 												foreach ( $user_roles as $role_key ) {
 													if ( 'all' === $role_key ) {
-														$roles_labels = array( __( 'Tous les utilisateurs', 'mj-elementor-templates' ) );
+														$roles_labels = array( __( 'Tous les utilisateurs', 'elementor-supertool' ) );
 														break;
 													}
 													$roles_labels[] = MJET_Target_Rules::get_user_role_label( $role_key );
@@ -524,21 +524,21 @@ class MJET_Admin {
 														<span class="mjet-theme-manager__badge mjet-theme-manager__badge--muted"><?php echo esc_html( $status_label ); ?></span>
 													<?php endif; ?>
 													<?php if ( $is_global ) : ?>
-														<span class="mjet-theme-manager__badge mjet-theme-manager__badge--success"><?php esc_html_e( 'Site entier', 'mj-elementor-templates' ); ?></span>
+														<span class="mjet-theme-manager__badge mjet-theme-manager__badge--success"><?php esc_html_e( 'Site entier', 'elementor-supertool' ); ?></span>
 													<?php endif; ?>
 												</div>
 												<div class="mjet-theme-manager__meta">
-													<strong><?php esc_html_e( 'Règles', 'mj-elementor-templates' ); ?>:</strong>
+													<strong><?php esc_html_e( 'Règles', 'elementor-supertool' ); ?>:</strong>
 													<?php echo esc_html( implode( ' · ', array_unique( $include_rules ) ) ); ?>
 												</div>
 												<?php if ( ! empty( $exclude_rules ) ) : ?>
 													<div class="mjet-theme-manager__meta">
-														<strong><?php esc_html_e( 'Exclusions', 'mj-elementor-templates' ); ?>:</strong>
+														<strong><?php esc_html_e( 'Exclusions', 'elementor-supertool' ); ?>:</strong>
 														<?php echo esc_html( implode( ' · ', array_unique( $exclude_rules ) ) ); ?>
 													</div>
 												<?php endif; ?>
 												<div class="mjet-theme-manager__meta">
-													<strong><?php esc_html_e( 'Rôles', 'mj-elementor-templates' ); ?>:</strong>
+													<strong><?php esc_html_e( 'Rôles', 'elementor-supertool' ); ?>:</strong>
 													<?php echo esc_html( $roles_summary ); ?>
 												</div>
 											</li>
@@ -547,7 +547,7 @@ class MJET_Admin {
 								<?php else : ?>
 									<div class="mjet-theme-manager__empty">
 										<span class="dashicons dashicons-visibility"></span>
-										<p><?php esc_html_e( 'Aucun template assigné pour cet emplacement.', 'mj-elementor-templates' ); ?></p>
+										<p><?php esc_html_e( 'Aucun template assigné pour cet emplacement.', 'elementor-supertool' ); ?></p>
 									</div>
 								<?php endif; ?>
 							</div>
@@ -556,10 +556,10 @@ class MJET_Admin {
 			</div>
 
 			<footer class="mjet-theme-manager__legend">
-				<strong><?php esc_html_e( 'Légende', 'mj-elementor-templates' ); ?>:</strong>
-				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--primary"></span><?php esc_html_e( 'Structure', 'mj-elementor-templates' ); ?></span>
-				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--info"></span><?php esc_html_e( 'Singulier', 'mj-elementor-templates' ); ?></span>
-				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--muted"></span><?php esc_html_e( 'Archive / Recherche', 'mj-elementor-templates' ); ?></span>
+				<strong><?php esc_html_e( 'Légende', 'elementor-supertool' ); ?>:</strong>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--primary"></span><?php esc_html_e( 'Structure', 'elementor-supertool' ); ?></span>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--info"></span><?php esc_html_e( 'Singulier', 'elementor-supertool' ); ?></span>
+				<span class="mjet-theme-manager__legend-item"><span class="mjet-theme-manager__legend-dot mjet-theme-manager__legend-dot--muted"></span><?php esc_html_e( 'Archive / Recherche', 'elementor-supertool' ); ?></span>
 			</footer>
 		</div>
 		<?php
@@ -580,7 +580,7 @@ class MJET_Admin {
 		?>
 		<label class="screen-reader-text" for="mjet_type_filter">&nbsp;</label>
 		<select name="mjet_type_filter" id="mjet_type_filter" class="postform">
-			<option value=""><?php esc_html_e( 'Tous les types', 'mj-elementor-templates' ); ?></option>
+			<option value=""><?php esc_html_e( 'Tous les types', 'elementor-supertool' ); ?></option>
 			<?php foreach ( $template_types as $type_key => $type_label ) : ?>
 				<option value="<?php echo esc_attr( $type_key ); ?>" <?php selected( $current_type, $type_key ); ?>><?php echo esc_html( $type_label ); ?></option>
 			<?php endforeach; ?>
@@ -633,38 +633,38 @@ class MJET_Admin {
 	public function render_settings_page() {
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'MJ Elementor Templates', 'mj-elementor-templates' ); ?></h1>
+			<h1><?php esc_html_e( 'Elementor Supertool', 'elementor-supertool' ); ?></h1>
 			<div class="mjet-welcome-panel">
 				<div class="mjet-welcome-panel-content">
-					<h2><?php esc_html_e( 'Bienvenue dans MJ Elementor Templates !', 'mj-elementor-templates' ); ?></h2>
+					<h2><?php esc_html_e( 'Bienvenue dans Elementor Supertool !', 'elementor-supertool' ); ?></h2>
 					<p class="about-description">
-						<?php esc_html_e( 'Créez des en-têtes, pieds de page et blocs personnalisés avec Elementor et affichez-les sur votre site.', 'mj-elementor-templates' ); ?>
+						<?php esc_html_e( 'Créez des en-têtes, pieds de page et blocs personnalisés avec Elementor et affichez-les sur votre site.', 'elementor-supertool' ); ?>
 					</p>
 					<div class="mjet-welcome-panel-column-container">
 						<div class="mjet-welcome-panel-column">
-							<h3><?php esc_html_e( 'Premiers pas', 'mj-elementor-templates' ); ?></h3>
+							<h3><?php esc_html_e( 'Premiers pas', 'elementor-supertool' ); ?></h3>
 							<ul>
 								<li>
 									<a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=mjet-template' ) ); ?>">
 										<span class="dashicons dashicons-plus-alt"></span>
-										<?php esc_html_e( 'Créer un nouveau template', 'mj-elementor-templates' ); ?>
+										<?php esc_html_e( 'Créer un nouveau template', 'elementor-supertool' ); ?>
 									</a>
 								</li>
 								<li>
 									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=mjet-template' ) ); ?>">
 										<span class="dashicons dashicons-list-view"></span>
-										<?php esc_html_e( 'Voir tous les templates', 'mj-elementor-templates' ); ?>
+										<?php esc_html_e( 'Voir tous les templates', 'elementor-supertool' ); ?>
 									</a>
 								</li>
 							</ul>
 						</div>
 						<div class="mjet-welcome-panel-column">
-							<h3><?php esc_html_e( 'Types de templates', 'mj-elementor-templates' ); ?></h3>
+							<h3><?php esc_html_e( 'Types de templates', 'elementor-supertool' ); ?></h3>
 							<ul>
-								<li><strong><?php esc_html_e( 'Header', 'mj-elementor-templates' ); ?></strong> - <?php esc_html_e( 'En-tête personnalisé', 'mj-elementor-templates' ); ?></li>
-								<li><strong><?php esc_html_e( 'Footer', 'mj-elementor-templates' ); ?></strong> - <?php esc_html_e( 'Pied de page personnalisé', 'mj-elementor-templates' ); ?></li>
-								<li><strong><?php esc_html_e( 'Before Footer', 'mj-elementor-templates' ); ?></strong> - <?php esc_html_e( 'Section avant le pied de page', 'mj-elementor-templates' ); ?></li>
-								<li><strong><?php esc_html_e( 'Custom Block', 'mj-elementor-templates' ); ?></strong> - <?php esc_html_e( 'Bloc via shortcode', 'mj-elementor-templates' ); ?></li>
+								<li><strong><?php esc_html_e( 'Header', 'elementor-supertool' ); ?></strong> - <?php esc_html_e( 'En-tête personnalisé', 'elementor-supertool' ); ?></li>
+								<li><strong><?php esc_html_e( 'Footer', 'elementor-supertool' ); ?></strong> - <?php esc_html_e( 'Pied de page personnalisé', 'elementor-supertool' ); ?></li>
+								<li><strong><?php esc_html_e( 'Before Footer', 'elementor-supertool' ); ?></strong> - <?php esc_html_e( 'Section avant le pied de page', 'elementor-supertool' ); ?></li>
+								<li><strong><?php esc_html_e( 'Custom Block', 'elementor-supertool' ); ?></strong> - <?php esc_html_e( 'Bloc via shortcode', 'elementor-supertool' ); ?></li>
 							</ul>
 						</div>
 					</div>
@@ -674,7 +674,7 @@ class MJET_Admin {
 			$available_widgets = MJET_Widgets_Loader::get_widget_catalog();
 			?>
 			<div class="mjet-widgets-panel">
-				<h2><?php esc_html_e( 'Widgets MJ Templates', 'mj-elementor-templates' ); ?></h2>
+				<h2><?php esc_html_e( 'Widgets Supertool', 'elementor-supertool' ); ?></h2>
 				<?php if ( ! empty( $available_widgets ) ) : ?>
 					<ul class="mjet-widgets-list">
 						<?php foreach ( $available_widgets as $widget ) :
@@ -693,16 +693,16 @@ class MJET_Admin {
 								<?php endif; ?>
 								<div class="mjet-widget-meta">
 									<span class="mjet-widget-title"><?php echo esc_html( $widget['title'] ); ?></span>
-									<span class="mjet-widget-slug"><?php printf( esc_html__( 'Identifiant : %s', 'mj-elementor-templates' ), esc_html( $widget['name'] ) ); ?></span>
+									<span class="mjet-widget-slug"><?php printf( esc_html__( 'Identifiant : %s', 'elementor-supertool' ), esc_html( $widget['name'] ) ); ?></span>
 									<?php if ( ! empty( $keywords ) ) : ?>
-										<span class="mjet-widget-keywords"><?php printf( esc_html__( 'Mots-clés : %s', 'mj-elementor-templates' ), esc_html( implode( ', ', $keywords ) ) ); ?></span>
+										<span class="mjet-widget-keywords"><?php printf( esc_html__( 'Mots-clés : %s', 'elementor-supertool' ), esc_html( implode( ', ', $keywords ) ) ); ?></span>
 									<?php endif; ?>
 								</div>
 							</li>
 						<?php endforeach; ?>
 					</ul>
 				<?php else : ?>
-					<p class="description"><?php esc_html_e( 'Aucun widget disponible pour le moment.', 'mj-elementor-templates' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Aucun widget disponible pour le moment.', 'elementor-supertool' ); ?></p>
 				<?php endif; ?>
 			</div>
 		</div>
@@ -800,7 +800,7 @@ class MJET_Admin {
 	public function register_metabox() {
 		add_meta_box(
 			'mjet-meta-box',
-			__( 'Options du template', 'mj-elementor-templates' ),
+			__( 'Options du template', 'elementor-supertool' ),
 			array( $this, 'render_metabox' ),
 			'mjet-template',
 			'normal',
@@ -847,11 +847,11 @@ class MJET_Admin {
 			<tbody>
 				<tr>
 					<th scope="row">
-						<label for="mjet_template_type"><?php esc_html_e( 'Type de template', 'mj-elementor-templates' ); ?></label>
+						<label for="mjet_template_type"><?php esc_html_e( 'Type de template', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<select name="mjet_template_type" id="mjet_template_type" class="regular-text">
-							<option value=""><?php esc_html_e( '— Sélectionner —', 'mj-elementor-templates' ); ?></option>
+							<option value=""><?php esc_html_e( '— Sélectionner —', 'elementor-supertool' ); ?></option>
 							<?php foreach ( $template_types as $type_key => $type_label ) : ?>
 								<option value="<?php echo esc_attr( $type_key ); ?>" <?php selected( $template_type, $type_key ); ?>><?php echo esc_html( $type_label ); ?></option>
 							<?php endforeach; ?>
@@ -861,7 +861,7 @@ class MJET_Admin {
 
 				<tr class="mjet-display-rules">
 					<th scope="row">
-						<label><?php esc_html_e( 'Afficher sur', 'mj-elementor-templates' ); ?></label>
+						<label><?php esc_html_e( 'Afficher sur', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<?php $this->render_location_select( 'mjet_target_include_locations', $include_locations ); ?>
@@ -870,7 +870,7 @@ class MJET_Admin {
 
 				<tr class="mjet-display-rules">
 					<th scope="row">
-						<label><?php esc_html_e( 'Exclure de', 'mj-elementor-templates' ); ?></label>
+						<label><?php esc_html_e( 'Exclure de', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<?php $this->render_location_select( 'mjet_target_exclude_locations', $exclude_locations ); ?>
@@ -879,7 +879,7 @@ class MJET_Admin {
 
 				<tr class="mjet-display-rules">
 					<th scope="row">
-						<label><?php esc_html_e( 'Rôles utilisateurs', 'mj-elementor-templates' ); ?></label>
+						<label><?php esc_html_e( 'Rôles utilisateurs', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<?php $this->render_user_roles_select( $user_roles ); ?>
@@ -888,21 +888,21 @@ class MJET_Admin {
 
 				<tr class="mjet-shortcode-row">
 					<th scope="row">
-						<label><?php esc_html_e( 'Shortcode', 'mj-elementor-templates' ); ?></label>
+						<label><?php esc_html_e( 'Shortcode', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<input type="text" readonly value="[mjet_template id='<?php echo esc_attr( $post->ID ); ?>']" class="regular-text code" onclick="this.select();">
-						<p class="description"><?php esc_html_e( 'Copiez ce shortcode pour insérer ce template n\'importe où.', 'mj-elementor-templates' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Copiez ce shortcode pour insérer ce template n\'importe où.', 'elementor-supertool' ); ?></p>
 					</td>
 				</tr>
 
 				<tr>
 					<th scope="row">
-						<label for="mjet_display_on_canvas"><?php esc_html_e( 'Activer sur Canvas ?', 'mj-elementor-templates' ); ?></label>
+						<label for="mjet_display_on_canvas"><?php esc_html_e( 'Activer sur Canvas ?', 'elementor-supertool' ); ?></label>
 					</th>
 					<td>
 						<input type="checkbox" name="mjet_display_on_canvas" id="mjet_display_on_canvas" value="1" <?php checked( $display_on_canvas ); ?>>
-						<span class="description"><?php esc_html_e( 'Afficher ce template sur les pages utilisant le template Canvas d\'Elementor.', 'mj-elementor-templates' ); ?></span>
+						<span class="description"><?php esc_html_e( 'Afficher ce template sur les pages utilisant le template Canvas d\'Elementor.', 'elementor-supertool' ); ?></span>
 					</td>
 				</tr>
 			</tbody>
@@ -934,7 +934,7 @@ class MJET_Admin {
 					</optgroup>
 				<?php endforeach; ?>
 			</select>
-			<p class="description"><?php esc_html_e( 'Maintenez Ctrl/Cmd pour sélectionner plusieurs options.', 'mj-elementor-templates' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Maintenez Ctrl/Cmd pour sélectionner plusieurs options.', 'elementor-supertool' ); ?></p>
 		</div>
 		<?php if ( $is_exclusion ) : ?>
 			<?php
@@ -949,7 +949,7 @@ class MJET_Admin {
 			?>
 			<?php if ( ! empty( $pages ) ) : ?>
 				<div class="mjet-location-specific">
-					<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Pages spécifiques à exclure', 'mj-elementor-templates' ); ?></label>
+					<label for="<?php echo esc_attr( $field_id ); ?>"><?php esc_html_e( 'Pages spécifiques à exclure', 'elementor-supertool' ); ?></label>
 					<select name="<?php echo esc_attr( $name ); ?>[specific][]" id="<?php echo esc_attr( $field_id ); ?>" multiple style="width: 100%; min-height: 120px;">
 						<?php foreach ( $pages as $page ) : ?>
 							<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( in_array( (int) $page->ID, $specific, true ), true ); ?>>
@@ -957,7 +957,7 @@ class MJET_Admin {
 							</option>
 						<?php endforeach; ?>
 					</select>
-					<p class="description"><?php esc_html_e( 'Ces pages seront exclues même si elles correspondent aux règles ci-dessus.', 'mj-elementor-templates' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Ces pages seront exclues même si elles correspondent aux règles ci-dessus.', 'elementor-supertool' ); ?></p>
 				</div>
 			<?php endif; ?>
 		<?php endif; ?>
@@ -979,7 +979,7 @@ class MJET_Admin {
 				</option>
 			<?php endforeach; ?>
 		</select>
-		<p class="description"><?php esc_html_e( 'Laisser vide pour tous les utilisateurs.', 'mj-elementor-templates' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Laisser vide pour tous les utilisateurs.', 'elementor-supertool' ); ?></p>
 		<?php
 	}
 
@@ -1086,9 +1086,9 @@ class MJET_Admin {
 		$date = $columns['date'];
 		unset( $columns['date'] );
 
-		$columns['mjet_type']          = __( 'Type', 'mj-elementor-templates' );
-		$columns['mjet_display_rules'] = __( 'Règles d\'affichage', 'mj-elementor-templates' );
-		$columns['mjet_shortcode']     = __( 'Shortcode', 'mj-elementor-templates' );
+		$columns['mjet_type']          = __( 'Type', 'elementor-supertool' );
+		$columns['mjet_display_rules'] = __( 'Règles d\'affichage', 'elementor-supertool' );
+		$columns['mjet_shortcode']     = __( 'Shortcode', 'elementor-supertool' );
 		$columns['date']               = $date;
 
 		return $columns;
@@ -1111,7 +1111,7 @@ class MJET_Admin {
 			case 'mjet_display_rules':
 				$locations = get_post_meta( $post_id, 'mjet_target_include_locations', true );
 				if ( ! empty( $locations['rule'] ) ) {
-					echo '<strong>' . esc_html__( 'Afficher:', 'mj-elementor-templates' ) . '</strong> ';
+					echo '<strong>' . esc_html__( 'Afficher:', 'elementor-supertool' ) . '</strong> ';
 					echo esc_html( implode( ', ', $locations['rule'] ) );
 				} else {
 					echo '—';

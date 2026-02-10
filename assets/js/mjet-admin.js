@@ -1,7 +1,7 @@
 /**
  * Scripts admin pour MJ Elementor Templates.
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 (function($) {

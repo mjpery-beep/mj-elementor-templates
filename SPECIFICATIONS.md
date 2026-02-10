@@ -1,8 +1,8 @@
-# Spécifications - Module MJ Elementor Templates
+# Spécifications - Module Elementor Supertool
 
 ## 1. Vue d'ensemble
 
-**Nom du module** : MJ Elementor Templates  
+**Nom du module** : Elementor Supertool  
 **Version** : 1.0.0  
 **Type** : Plugin WordPress  
 **Dépendance requise** : Elementor 3.5.0 ou supérieur  
@@ -76,8 +76,8 @@ Module de gestion des en-têtes (headers), pieds de page (footers) et blocs pers
 
 ### 3.1 Structure des répertoires
 ```
-mj-elementor-templates/
-├── mj-elementor-templates.php       # Fichier principal
+elementor-supertool/
+├── elementor-supertool.php       # Fichier principal
 ├── includes/
 │   ├── class-mjet-admin.php         # Gestion admin et post type
 │   ├── class-mjet-target-rules.php  # Règles de ciblage
@@ -105,8 +105,8 @@ mj-elementor-templates/
 └── README.md
 ```
 
-### 3.2 Classe principale : `MJ_Elementor_Templates`
-**Fichier** : `mj-elementor-templates.php`
+### 3.2 Classe principale : `Elementor_SuperTool` (alias `MJ_Elementor_Templates` pour compatibilité)
+**Fichier** : `elementor-supertool.php`
 
 **Responsabilités** :
 - Initialisation du plugin
@@ -174,7 +174,7 @@ mj-elementor-templates/
 **Responsabilités** :
 - Enregistrement des widgets Elementor
 - Chargement des scripts/styles
-- Création de la catégorie "MJ Templates"
+- Création de la catégorie "Supertool Templates"
 
 ### 3.6 Classe `MJET_Theme_Manager`
 **Fichier** : `includes/class-mjet-theme-manager.php`
@@ -186,7 +186,7 @@ mj-elementor-templates/
 - Exposition des hooks `mjet/theme_manager/before_content` et `mjet/theme_manager/after_content`
 
 **Flux principal** :
-1. `wp` détecte le contexte courant et calcule l'ID de template via `MJ_Elementor_Templates::get_template_id()`
+1. `wp` détecte le contexte courant et calcule l'ID de template via `Elementor_SuperTool::get_template_id()`
 2. Enqueue des CSS immédiatement pour garantir le rendu dans `wp_head`
 3. `the_content` injecte le template pour Single Page/Post/Product
 4. `template_include` redirige vers `templates/theme-builder.php` pour archives/recherche/404
@@ -423,7 +423,7 @@ ELEMENTOR_VERSION                // Version d'Elementor
 
 ### 12.3 Utiliser le widget Menu
 1. Ouvrir Elementor header
-2. Ajouter widget → MJ Templates → Menu Navigation
+2. Ajouter widget → Supertool Templates → Menu Navigation
 3. Sélectionner le menu WordPress
 4. Configurer le layout (horizontal/vertical)
 5. Personnaliser les styles
@@ -498,19 +498,19 @@ mjet_is_canvas_enabled($template_id)
 ### 16.1 Commandes de maintenance
 ```bash
 # Diagnostic
-https://www.mj-pery.be/wp-content/plugins/mj-elementor-templates/debug.php?key=mjet_debug
+https://www.mj-pery.be/wp-content/plugins/elementor-supertool/debug.php?key=mjet_debug
 
 # Migration
-https://www.mj-pery.be/wp-content/plugins/mj-elementor-templates/debug-migration.php?key=mjet_debug_mig
+https://www.mj-pery.be/wp-content/plugins/elementor-supertool/debug-migration.php?key=mjet_debug_mig
 
 # Régénération CSS
-https://www.mj-pery.be/wp-content/plugins/mj-elementor-templates/regenerate-css.php?key=mjet_regen
+https://www.mj-pery.be/wp-content/plugins/elementor-supertool/regenerate-css.php?key=mjet_regen
 
 # Configuration automatique
-https://www.mj-pery.be/wp-content/plugins/mj-elementor-templates/setup-templates.php?key=mjet_setup
+https://www.mj-pery.be/wp-content/plugins/elementor-supertool/setup-templates.php?key=mjet_setup
 
 # Correction des templates
-https://www.mj-pery.be/wp-content/plugins/mj-elementor-templates/fix-templates.php?key=mjet_fix_2024
+https://www.mj-pery.be/wp-content/plugins/elementor-supertool/fix-templates.php?key=mjet_fix_2024
 ```
 
 ### 16.2 Fichiers de log

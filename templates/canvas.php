@@ -5,7 +5,7 @@
  * Ce fichier est une copie du template Canvas d'Elementor,
  * assurant que the_content() est correctement appelé.
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

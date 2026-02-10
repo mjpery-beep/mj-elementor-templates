@@ -2,10 +2,10 @@
 /**
  * Régénérer les CSS Elementor pour tous les templates MJET.
  *
- * Accès via: /wp-content/plugins/mj-elementor-templates/regenerate-css.php?key=mjet_regen
+ * Accès via: /wp-content/plugins/elementor-supertool/regenerate-css.php?key=mjet_regen
  */
 
-// Chemin: plugins/mj-elementor-templates/regenerate-css.php -> wp-load.php
+// Chemin: plugins/elementor-supertool/regenerate-css.php -> wp-load.php
 require_once dirname( __DIR__, 3 ) . '/wp-load.php';
 
 if ( ! isset( $_GET['key'] ) || 'mjet_regen' !== $_GET['key'] ) {

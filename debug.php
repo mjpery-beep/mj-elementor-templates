@@ -2,10 +2,10 @@
 /**
  * Debug des templates MJET.
  *
- * Accès via: /wp-content/plugins/mj-elementor-templates/debug.php?key=mjet_debug
+ * Accès via: /wp-content/plugins/elementor-supertool/debug.php?key=mjet_debug
  */
 
-// Chemin: plugins/mj-elementor-templates/debug.php -> wp-load.php
+// Chemin: plugins/elementor-supertool/debug.php -> wp-load.php
 require_once dirname( __DIR__, 3 ) . '/wp-load.php';
 
 if ( ! isset( $_GET['key'] ) || 'mjet_debug' !== $_GET['key'] ) {

@@ -198,7 +198,7 @@ final class Elementor_SuperTool {
 	 * Charger les traductions.
 	 */
 	public function load_textdomain() {
-		load_plugin_textdomain( 'mj-elementor-templates', false, dirname( MJET_PATH ) . '/languages' );
+		load_plugin_textdomain( 'elementor-supertool', false, dirname( MJET_PATH ) . '/languages' );
 	}
 
 	/**
@@ -318,7 +318,7 @@ final class Elementor_SuperTool {
 	 * Support par défaut pour les thèmes non supportés.
 	 */
 	public function setup_fallback_support() {
-		if ( ! current_theme_supports( 'mj-elementor-templates' ) ) {
+		if ( ! current_theme_supports( 'elementor-supertool' ) ) {
 			require_once MJET_DIR . 'includes/themes/class-mjet-default-compat.php';
 		}
 	}

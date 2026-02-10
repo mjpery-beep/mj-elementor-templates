@@ -2,7 +2,7 @@
 /**
  * Fallback template used by the MJET theme manager locations.
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

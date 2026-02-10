@@ -2,7 +2,7 @@
 /**
  * Widget Chaine YouTube pour Elementor.
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 namespace MJET\Widgets;
@@ -35,7 +35,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 	 * Titre du widget.
 	 */
 	public function get_title() {
-		return __( 'Chaine YouTube', 'mj-elementor-templates' );
+		return __( 'Chaine YouTube', 'elementor-supertool' );
 	}
 
 	/**
@@ -81,17 +81,17 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_source',
 			array(
-				'label' => __( 'Source', 'mj-elementor-templates' ),
+				'label' => __( 'Source', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'api_key',
 			array(
-				'label'       => __( 'Cle API YouTube', 'mj-elementor-templates' ),
+				'label'       => __( 'Cle API YouTube', 'elementor-supertool' ),
 				'type'        => Controls_Manager::TEXT,
-				'placeholder' => __( 'AIzaSy...', 'mj-elementor-templates' ),
-				'description' => __( 'Generez une cle API dans Google Cloud Console (YouTube Data API v3).', 'mj-elementor-templates' ),
+				'placeholder' => __( 'AIzaSy...', 'elementor-supertool' ),
+				'description' => __( 'Generez une cle API dans Google Cloud Console (YouTube Data API v3).', 'elementor-supertool' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
@@ -99,10 +99,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'channel_id',
 			array(
-				'label'       => __( 'ID de la chaine', 'mj-elementor-templates' ),
+				'label'       => __( 'ID de la chaine', 'elementor-supertool' ),
 				'type'        => Controls_Manager::TEXT,
-				'placeholder' => __( 'UCxxxxxxxxxxxx', 'mj-elementor-templates' ),
-				'description' => __( 'Utilisez l\'ID unique de la chaine YouTube.', 'mj-elementor-templates' ),
+				'placeholder' => __( 'UCxxxxxxxxxxxx', 'elementor-supertool' ),
+				'description' => __( 'Utilisez l\'ID unique de la chaine YouTube.', 'elementor-supertool' ),
 				'dynamic'     => array( 'active' => true ),
 			)
 		);
@@ -110,7 +110,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'max_results',
 			array(
-				'label'   => __( 'Nombre de videos', 'mj-elementor-templates' ),
+				'label'   => __( 'Nombre de videos', 'elementor-supertool' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 6,
 				'input_attrs' => array(
@@ -123,12 +123,12 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'layout',
 			array(
-				'label'   => __( 'Disposition', 'mj-elementor-templates' ),
+				'label'   => __( 'Disposition', 'elementor-supertool' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'grid',
 				'options' => array(
-					'grid' => __( 'Grille', 'mj-elementor-templates' ),
-					'list' => __( 'Liste', 'mj-elementor-templates' ),
+					'grid' => __( 'Grille', 'elementor-supertool' ),
+					'list' => __( 'Liste', 'elementor-supertool' ),
 				),
 			)
 		);
@@ -136,7 +136,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_responsive_control(
 			'columns',
 			array(
-				'label'           => __( 'Colonnes', 'mj-elementor-templates' ),
+				'label'           => __( 'Colonnes', 'elementor-supertool' ),
 				'type'            => Controls_Manager::SLIDER,
 				'size_units'      => array( '' ),
 				'range'           => array(
@@ -167,10 +167,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'show_title',
 			array(
-				'label'        => __( 'Afficher le titre', 'mj-elementor-templates' ),
+				'label'        => __( 'Afficher le titre', 'elementor-supertool' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'label_on'     => __( 'Oui', 'elementor-supertool' ),
+				'label_off'    => __( 'Non', 'elementor-supertool' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			)
@@ -179,10 +179,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'show_date',
 			array(
-				'label'        => __( 'Afficher la date', 'mj-elementor-templates' ),
+				'label'        => __( 'Afficher la date', 'elementor-supertool' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'label_on'     => __( 'Oui', 'elementor-supertool' ),
+				'label_off'    => __( 'Non', 'elementor-supertool' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			)
@@ -191,10 +191,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'show_description',
 			array(
-				'label'        => __( 'Afficher la description', 'mj-elementor-templates' ),
+				'label'        => __( 'Afficher la description', 'elementor-supertool' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'label_on'     => __( 'Oui', 'elementor-supertool' ),
+				'label_off'    => __( 'Non', 'elementor-supertool' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			)
@@ -203,7 +203,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'description_length',
 			array(
-				'label'     => __( 'Longueur description', 'mj-elementor-templates' ),
+				'label'     => __( 'Longueur description', 'elementor-supertool' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 20,
 				'condition' => array(
@@ -219,10 +219,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'show_watch_button',
 			array(
-				'label'        => __( 'Afficher le bouton', 'mj-elementor-templates' ),
+				'label'        => __( 'Afficher le bouton', 'elementor-supertool' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'label_on'     => __( 'Oui', 'elementor-supertool' ),
+				'label_off'    => __( 'Non', 'elementor-supertool' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			)
@@ -231,9 +231,9 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'watch_button_text',
 			array(
-				'label'     => __( 'Texte du bouton', 'mj-elementor-templates' ),
+				'label'     => __( 'Texte du bouton', 'elementor-supertool' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => __( 'Voir sur YouTube', 'mj-elementor-templates' ),
+				'default'   => __( 'Voir sur YouTube', 'elementor-supertool' ),
 				'condition' => array(
 					'show_watch_button' => 'yes',
 				),
@@ -243,10 +243,10 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'open_in_new_tab',
 			array(
-				'label'        => __( 'Ouvrir dans un nouvel onglet', 'mj-elementor-templates' ),
+				'label'        => __( 'Ouvrir dans un nouvel onglet', 'elementor-supertool' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Oui', 'mj-elementor-templates' ),
-				'label_off'    => __( 'Non', 'mj-elementor-templates' ),
+				'label_on'     => __( 'Oui', 'elementor-supertool' ),
+				'label_off'    => __( 'Non', 'elementor-supertool' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			)
@@ -255,14 +255,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'cache_duration',
 			array(
-				'label'       => __( 'Cache (minutes)', 'mj-elementor-templates' ),
+				'label'       => __( 'Cache (minutes)', 'elementor-supertool' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => 60,
 				'input_attrs' => array(
 					'min'  => 5,
 					'step' => 5,
 				),
-				'description' => __( 'Duree pendant laquelle les videos sont memorisees.', 'mj-elementor-templates' ),
+				'description' => __( 'Duree pendant laquelle les videos sont memorisees.', 'elementor-supertool' ),
 			)
 		);
 
@@ -276,14 +276,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_layout_style',
 			array(
-				'label' => __( 'Disposition', 'mj-elementor-templates' ),
+				'label' => __( 'Disposition', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_responsive_control(
 			'column_gap',
 			array(
-				'label'      => __( 'Espace horizontal', 'mj-elementor-templates' ),
+				'label'      => __( 'Espace horizontal', 'elementor-supertool' ),
 				'type'       => Controls_Manager::SLIDER,
 				'range'      => array(
 					'px' => array(
@@ -300,7 +300,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_responsive_control(
 			'row_gap',
 			array(
-				'label'      => __( 'Espace vertical', 'mj-elementor-templates' ),
+				'label'      => __( 'Espace vertical', 'elementor-supertool' ),
 				'type'       => Controls_Manager::SLIDER,
 				'range'      => array(
 					'px' => array(
@@ -319,14 +319,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_card_style',
 			array(
-				'label' => __( 'Carte video', 'mj-elementor-templates' ),
+				'label' => __( 'Carte video', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_responsive_control(
 			'card_padding',
 			array(
-				'label'      => __( 'Marge interne', 'mj-elementor-templates' ),
+				'label'      => __( 'Marge interne', 'elementor-supertool' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%', 'em' ),
 				'selectors'  => array(
@@ -338,7 +338,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'card_background_heading',
 			array(
-				'label' => __( 'Arriere-plan', 'mj-elementor-templates' ),
+				'label' => __( 'Arriere-plan', 'elementor-supertool' ),
 				'type'  => Controls_Manager::HEADING,
 			)
 		);
@@ -347,7 +347,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 			Group_Control_Background::get_type(),
 			array(
 				'name'     => 'card_background',
-				'label'    => __( 'Arriere-plan', 'mj-elementor-templates' ),
+				'label'    => __( 'Arriere-plan', 'elementor-supertool' ),
 				'selector' => '{{WRAPPER}} .mjet-youtube-channel__item',
 			)
 		);
@@ -363,7 +363,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_responsive_control(
 			'card_border_radius',
 			array(
-				'label'      => __( 'Rayon', 'mj-elementor-templates' ),
+				'label'      => __( 'Rayon', 'elementor-supertool' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%', 'em' ),
 				'selectors'  => array(
@@ -385,14 +385,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_title_style',
 			array(
-				'label' => __( 'Titre', 'mj-elementor-templates' ),
+				'label' => __( 'Titre', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'title_color',
 			array(
-				'label'     => __( 'Couleur', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__title a' => 'color: {{VALUE}};',
@@ -403,7 +403,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'title_hover_color',
 			array(
-				'label'     => __( 'Couleur (hover)', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur (hover)', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__title a:hover' => 'color: {{VALUE}};',
@@ -424,14 +424,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_meta_style',
 			array(
-				'label' => __( 'Metas', 'mj-elementor-templates' ),
+				'label' => __( 'Metas', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'meta_color',
 			array(
-				'label'     => __( 'Couleur', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__meta' => 'color: {{VALUE}};',
@@ -452,14 +452,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_description_style',
 			array(
-				'label' => __( 'Description', 'mj-elementor-templates' ),
+				'label' => __( 'Description', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'description_color',
 			array(
-				'label'     => __( 'Couleur', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__description' => 'color: {{VALUE}};',
@@ -480,7 +480,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_section(
 			'section_button_style',
 			array(
-				'label' => __( 'Bouton', 'mj-elementor-templates' ),
+				'label' => __( 'Bouton', 'elementor-supertool' ),
 				'condition' => array(
 					'show_watch_button' => 'yes',
 				),
@@ -500,14 +500,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			array(
-				'label' => __( 'Normal', 'mj-elementor-templates' ),
+				'label' => __( 'Normal', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'button_color',
 			array(
-				'label'     => __( 'Couleur du texte', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur du texte', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__cta' => 'color: {{VALUE}};',
@@ -518,7 +518,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'button_background',
 			array(
-				'label'     => __( 'Couleur de fond', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur de fond', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__cta' => 'background-color: {{VALUE}};',
@@ -537,7 +537,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_responsive_control(
 			'button_border_radius',
 			array(
-				'label'      => __( 'Rayon', 'mj-elementor-templates' ),
+				'label'      => __( 'Rayon', 'elementor-supertool' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
@@ -549,7 +549,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_responsive_control(
 			'button_padding',
 			array(
-				'label'      => __( 'Marge interne', 'mj-elementor-templates' ),
+				'label'      => __( 'Marge interne', 'elementor-supertool' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', 'em' ),
 				'selectors'  => array(
@@ -563,14 +563,14 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			array(
-				'label' => __( 'Survol', 'mj-elementor-templates' ),
+				'label' => __( 'Survol', 'elementor-supertool' ),
 			)
 		);
 
 		$this->add_control(
 			'button_hover_color',
 			array(
-				'label'     => __( 'Couleur du texte', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur du texte', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__cta:hover' => 'color: {{VALUE}};',
@@ -581,7 +581,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$this->add_control(
 			'button_hover_background',
 			array(
-				'label'     => __( 'Couleur de fond', 'mj-elementor-templates' ),
+				'label'     => __( 'Couleur de fond', 'elementor-supertool' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .mjet-youtube-channel__cta:hover' => 'background-color: {{VALUE}};',
@@ -617,7 +617,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		}
 
 		if ( empty( $videos ) ) {
-			echo '<div class="mjet-youtube-channel__notice">' . esc_html__( 'Aucune video a afficher.', 'mj-elementor-templates' ) . '</div>';
+			echo '<div class="mjet-youtube-channel__notice">' . esc_html__( 'Aucune video a afficher.', 'elementor-supertool' ) . '</div>';
 			return;
 		}
 
@@ -631,7 +631,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$show_desc    = isset( $settings['show_description'] ) && 'yes' === $settings['show_description'];
 		$desc_length  = isset( $settings['description_length'] ) ? max( 5, absint( $settings['description_length'] ) ) : 20;
 		$show_button  = isset( $settings['show_watch_button'] ) && 'yes' === $settings['show_watch_button'];
-		$button_text  = ! empty( $settings['watch_button_text'] ) ? $settings['watch_button_text'] : __( 'Voir sur YouTube', 'mj-elementor-templates' );
+		$button_text  = ! empty( $settings['watch_button_text'] ) ? $settings['watch_button_text'] : __( 'Voir sur YouTube', 'elementor-supertool' );
 
 		echo '<div ' . $this->get_render_attribute_string( 'wrapper' ) . '>';
 
@@ -699,7 +699,7 @@ class MJET_Youtube_Channel extends Widget_Base {
 				return $this->get_preview_videos();
 			}
 
-			return new \WP_Error( 'mjet_youtube_missing_settings', __( 'Renseignez la cle API et l\'ID de chaine.', 'mj-elementor-templates' ) );
+			return new \WP_Error( 'mjet_youtube_missing_settings', __( 'Renseignez la cle API et l\'ID de chaine.', 'elementor-supertool' ) );
 		}
 
 		$transient_key = 'mjet_youtube_' . md5( $channel_id . '|' . $max . '|' . $api_key );
@@ -737,13 +737,13 @@ class MJET_Youtube_Channel extends Widget_Base {
 		$body   = wp_remote_retrieve_body( $response );
 
 		if ( 200 !== $status || empty( $body ) ) {
-			return new \WP_Error( 'mjet_youtube_http_error', __( 'Impossible de recuperer les videos YouTube.', 'mj-elementor-templates' ) );
+			return new \WP_Error( 'mjet_youtube_http_error', __( 'Impossible de recuperer les videos YouTube.', 'elementor-supertool' ) );
 		}
 
 		$data = json_decode( $body, true );
 
 		if ( ! isset( $data['items'] ) || ! is_array( $data['items'] ) ) {
-			return new \WP_Error( 'mjet_youtube_invalid_data', __( 'La reponse YouTube est invalide.', 'mj-elementor-templates' ) );
+			return new \WP_Error( 'mjet_youtube_invalid_data', __( 'La reponse YouTube est invalide.', 'elementor-supertool' ) );
 		}
 
 		$videos = array();
@@ -779,22 +779,22 @@ class MJET_Youtube_Channel extends Widget_Base {
 		return array(
 			array(
 				'id'           => 'dQw4w9WgXcQ',
-				'title'        => __( 'Video exemple 1', 'mj-elementor-templates' ),
-				'description'  => __( 'Description demo pour illustrer la liste des videos.', 'mj-elementor-templates' ),
+				'title'        => __( 'Video exemple 1', 'elementor-supertool' ),
+				'description'  => __( 'Description demo pour illustrer la liste des videos.', 'elementor-supertool' ),
 				'published_at' => gmdate( 'c', strtotime( '-3 days' ) ),
 				'thumbnail'    => 'https://i.ytimg.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
 			),
 			array(
 				'id'           => '9bZkp7q19f0',
-				'title'        => __( 'Video exemple 2', 'mj-elementor-templates' ),
-				'description'  => __( 'Utilisez vos propres donnees en renseignant la cle API et la chaine.', 'mj-elementor-templates' ),
+				'title'        => __( 'Video exemple 2', 'elementor-supertool' ),
+				'description'  => __( 'Utilisez vos propres donnees en renseignant la cle API et la chaine.', 'elementor-supertool' ),
 				'published_at' => gmdate( 'c', strtotime( '-10 days' ) ),
 				'thumbnail'    => 'https://i.ytimg.com/vi/9bZkp7q19f0/hqdefault.jpg',
 			),
 			array(
 				'id'           => '3JZ_D3ELwOQ',
-				'title'        => __( 'Video exemple 3', 'mj-elementor-templates' ),
-				'description'  => __( 'Apercu pour lediteur Elementor sans cle API.', 'mj-elementor-templates' ),
+				'title'        => __( 'Video exemple 3', 'elementor-supertool' ),
+				'description'  => __( 'Apercu pour lediteur Elementor sans cle API.', 'elementor-supertool' ),
 				'published_at' => gmdate( 'c', strtotime( '-20 days' ) ),
 				'thumbnail'    => 'https://i.ytimg.com/vi/3JZ_D3ELwOQ/hqdefault.jpg',
 			),

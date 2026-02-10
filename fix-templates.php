@@ -2,13 +2,13 @@
 /**
  * Script de correction des templates MJET.
  *
- * Accès via: /wp-content/plugins/mj-elementor-templates/fix-templates.php?key=mjet_fix_2024
+ * Accès via: /wp-content/plugins/elementor-supertool/fix-templates.php?key=mjet_fix_2024
  *
- * @package mj-elementor-templates
+ * @package elementor-supertool
  */
 
 // Charger WordPress.
-// Chemin: plugins/mj-elementor-templates/fix-templates.php -> wp-load.php
+// Chemin: plugins/elementor-supertool/fix-templates.php -> wp-load.php
 require_once dirname( __DIR__, 3 ) . '/wp-load.php';
 
 // Sécurité basique.

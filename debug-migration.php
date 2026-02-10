@@ -2,10 +2,10 @@
 /**
  * Debug de la migration Elementor.
  *
- * Accès via: /wp-content/plugins/mj-elementor-templates/debug-migration.php?key=mjet_debug_mig
+ * Accès via: /wp-content/plugins/elementor-supertool/debug-migration.php?key=mjet_debug_mig
  */
 
-// Chemin: plugins/mj-elementor-templates/debug-migration.php -> wp-load.php
+// Chemin: plugins/elementor-supertool/debug-migration.php -> wp-load.php
 require_once dirname( __DIR__, 3 ) . '/wp-load.php';
 
 if ( ! isset( $_GET['key'] ) || 'mjet_debug_mig' !== $_GET['key'] ) {
