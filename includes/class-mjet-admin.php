@@ -1213,11 +1213,13 @@ class MJET_Admin {
 
 		$should_enqueue = false;
 
+		// Enqueue sur les pages de templates (édition, création, liste).
 		if ( 'mjet-template' === $post_type && in_array( $hook, array( 'post.php', 'post-new.php', 'edit.php' ), true ) ) {
 			$should_enqueue = true;
 		}
 
-		if ( 'mj-templates_page_mjet-theme-manager' === $hook ) {
+		// Enqueue sur le gestionnaire de thème et la page de paramètres.
+		if ( isset( $_GET['page'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['page'] ) ), array( 'mjet-theme-manager', 'mjet-templates' ), true ) ) {
 			$should_enqueue = true;
 		}
 
