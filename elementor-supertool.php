@@ -120,6 +120,8 @@ final class Elementor_SuperTool {
 	 */
 	private function init_hooks() {
 		add_action( 'init', array( $this, 'load_textdomain' ) );
+		add_image_size( 'mjet-thumbnail', 60, 60, true ); 
+
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_shortcode( 'mjet_template', array( $this, 'render_template_shortcode' ) );
