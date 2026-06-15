@@ -126,7 +126,9 @@ final class Elementor_SuperTool {
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_shortcode( 'mjet_template', array( $this, 'render_template_shortcode' ) );
 		MJET_Security_Tweaks::init();
-		MJET_Login_Customizer::init();
+		if ( class_exists( 'MJET_Login_Customizer' ) ) {
+			MJET_Login_Customizer::init();
+		}
 		MJET_Theme_Manager::init();
 
 		// Compatibilité thème.
